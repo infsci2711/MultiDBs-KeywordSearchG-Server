@@ -19,15 +19,7 @@ import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.MySQL;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.Neo4j;
 
 
-
-
-
-
-
-
-
-
-public class test_MySQL {
+public class SQL2Neo4J {
 
 	public static void main(String[] args) {
 	String Neo4j_Path= new Config().neo4j_path;
