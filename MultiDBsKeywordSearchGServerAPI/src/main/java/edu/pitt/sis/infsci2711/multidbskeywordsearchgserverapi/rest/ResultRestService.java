@@ -67,6 +67,6 @@ public class ResultRestService {
 	}
 
 	private ResultAPIModel convertDbToViewModel(final ResultModel resultDB) {
-		return new ResultAPIModel(resultDB.getResult(), resultDB.getComeFrom());
+		return new ResultAPIModel(resultDB.getRecord(), resultDB.getColumn(), resultDB.getTable(), resultDB.getDatabase());
 	}
 }

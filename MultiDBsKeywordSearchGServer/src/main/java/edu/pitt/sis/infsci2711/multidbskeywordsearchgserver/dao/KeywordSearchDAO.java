@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.helpers.collection.IteratorUtil;
@@ -38,30 +40,56 @@ public class KeywordSearchDAO {
 
 		ExecutionEngine engine = new ExecutionEngine(db);
 		ExecutionResult result;
-		List<ResultModel> resultSet;
+		List<ResultModel> resultSet = null;
 
 		try (Transaction ignored = db.beginTx()) {
 
 			result = engine
-					.execute("MATCH (a)-[:`BELONG_TO`]->(b) Where a.value=~\".*"
-							+ str + ".*\" RETURN a,b");
-			//resultString = result.dumpToString();
+					.execute("MATCH p=(a)-[:`BELONG_TO`*..]->(b) Where a.value=~\".*"
+							+ str + ".*\" and b.type=\"database\" RETURN p");
+			// resultString = result.dumpToString();
 
-			//System.out.println(resultString);
+			// System.out.println(resultString);
 
 			resultSet = new ArrayList<ResultModel>();
 
 			for (Map<String, Object> row : result) {
-				Node a = (Node) row.get("a");
-				Node b = (Node) row.get("b");
-				resultSet.add(new ResultModel(
-						a.getProperty("value").toString(), b.getProperty(
-								"value").toString()));
+
+				String record = "";
+				String column = "";
+				String table = "";
+				String database = "";
+
+				Path p = (Path) row.get("p");
+				Iterator<Node> path_it = p.nodes().iterator();
+				while (path_it.hasNext()) {
+					Node tmp = path_it.next();
+					switch (tmp.getProperty("type").toString()) {
+					case "record":
+						record = tmp.getProperty("value").toString();
+						break;
+					case "column":
+						column = tmp.getProperty("value").toString();
+						break;
+					case "table":
+						table = tmp.getProperty("value").toString();
+						break;
+					case "database":
+						database = tmp.getProperty("value").toString();
+						break;
+					default:
+						break;
+					}
+				}
+				resultSet.add(new ResultModel(record, column, table, database));
+
 			}
 
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.shutdown();
 		}
-        db.shutdown();
-
 		return resultSet;
 	}
 
