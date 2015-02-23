@@ -45,7 +45,7 @@ public class KeywordSearchDAO {
 		try (Transaction ignored = db.beginTx()) {
 
 			result = engine
-					.execute("MATCH p=(a)-[:`BELONG_TO`*0..]->(b) Where a.value=~\".*"
+					.execute("MATCH p=(a)-[:`BELONG_TO`*0..]->(b) Where a.value=~\"(?i).*"
 							+ str + ".*\" and b.type=\"database\" RETURN p");
 			// resultString = result.dumpToString();
 
