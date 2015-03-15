@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
@@ -18,7 +20,6 @@ import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.helpers.collection.IteratorUtil;
 
-import static org.neo4j.kernel.impl.util.FileUtils.deleteRecursively;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.models.ResultModel;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.Config;
 
@@ -31,7 +32,7 @@ public class KeywordSearchDAO {
 
 	public static void main(String[] args) {
 		KeywordSearchDAO javaQuery = new KeywordSearchDAO();
-		System.out.println(javaQuery.search("chun").toString());
+		//System.out.println(javaQuery.search("chun").toString());
 	}
 
 	public static List<ResultModel> search(String str) {
@@ -40,18 +41,19 @@ public class KeywordSearchDAO {
 
 		ExecutionEngine engine = new ExecutionEngine(db);
 		ExecutionResult result;
-		List<ResultModel> resultSet = null;
+		List<ResultModel> resultSet = new ArrayList<ResultModel>();
+		String[] terms =str.split("\\s+");
+		
 
 		try (Transaction ignored = db.beginTx()) {
 
+			for(String term:terms){
 			result = engine
-					.execute("MATCH p=(a)-[:`BELONG_TO`*0..]->(b) Where a.value=~\"(?i).*"
-							+ str + ".*\" and b.type=\"database\" RETURN p");
+					.execute("MATCH p=(a)-[:`BELONG_TO`*0..]->(b) Where a.value=~\"(?i).*"+term+".*\" and b.type='database' RETURN p");
 			// resultString = result.dumpToString();
 
 			// System.out.println(resultString);
 
-			resultSet = new ArrayList<ResultModel>();
 
 			for (Map<String, Object> row : result) {
 
@@ -84,12 +86,14 @@ public class KeywordSearchDAO {
 				resultSet.add(new ResultModel(record, column, table, database));
 
 			}
-
+		  }
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			db.shutdown();
 		}
+		
+		// sorting
 		return resultSet;
 	}
 

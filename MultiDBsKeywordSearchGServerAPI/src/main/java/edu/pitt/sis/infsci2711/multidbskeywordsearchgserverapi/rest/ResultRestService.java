@@ -13,6 +13,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import scala.collection.Set;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.ResultService;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.models.ResultModel;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserverapi.viewModels.ResultAPIModel;
@@ -37,7 +38,7 @@ public class ResultRestService {
 		ResultService resultService = new ResultService();
 
 		try {
-			List<ResultModel> resultSet = resultService.find(str);
+			List<ResultModel> resultSet =  resultService.find(str);
 
 			if (resultSet != null) {
 				List<ResultAPIModel> result = convertDbToViewModel(resultSet);
@@ -57,9 +58,9 @@ public class ResultRestService {
 	}
 
 	private List<ResultAPIModel> convertDbToViewModel(
-			final List<ResultModel> resultsDB) {
+			final List<ResultModel> resultSet) {
 		List<ResultAPIModel> result = new ArrayList<ResultAPIModel>();
-		for (ResultModel resultDB : resultsDB) {
+		for (ResultModel resultDB : resultSet) {
 			result.add(convertDbToViewModel(resultDB));
 		}
 

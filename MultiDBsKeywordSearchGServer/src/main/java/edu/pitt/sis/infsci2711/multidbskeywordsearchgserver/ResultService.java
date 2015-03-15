@@ -2,6 +2,7 @@ package edu.pitt.sis.infsci2711.multidbskeywordsearchgserver;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.dao.KeywordSearchDAO;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.models.ResultModel;
