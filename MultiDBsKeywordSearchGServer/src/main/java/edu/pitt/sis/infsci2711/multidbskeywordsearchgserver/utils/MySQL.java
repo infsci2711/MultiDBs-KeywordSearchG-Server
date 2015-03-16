@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.neo4j.graphdb.Node;
+
 import com.mysql.jdbc.Connection;
 
 
@@ -14,12 +16,12 @@ public class MySQL {
 	Connection_to_MySQL link=new Connection_to_MySQL();
 	
 	
-	public MySQL(){	
-		link.toMySQL();	
+	public MySQL(String dbname) {
+		link.toMySQL(dbname);
 	}
-	
-	
-	
+
+
+
 	public List<String> getTableName(String database){
 		List<String> tables=new ArrayList<>();
 		
@@ -39,12 +41,12 @@ public class MySQL {
 
 	
 	
-	public List<String> getColumnName(String tableName){
+	public List<String> getColumnName(String tableName, String dbName){
 		List<String> columns=new ArrayList<>();
 		
 		PreparedStatement statement;
 		try {
-			statement = link.con.prepareStatement("SELECT column_name FROM information_schema.columns WHERE table_name = '"+tableName+"'");
+			statement = link.con.prepareStatement("SELECT distinct column_name FROM information_schema.columns WHERE table_name = '"+tableName+"' and TABLE_SCHEMA='"+dbName+"'");
 			ResultSet result=statement.executeQuery();
 			
 			while(result.next()){
@@ -62,8 +64,6 @@ public class MySQL {
 	
 	
 	public List<String> getValue(String columnName, String tableName){
-		
-		System.out.println("MySQL -- columnName: " + columnName + " tableName: " + tableName);
 		List<String> values=new ArrayList<>();
 		
 		try {
@@ -82,5 +82,7 @@ public class MySQL {
 		}
 		return values;
 	}
+	
+	
 	
 }
