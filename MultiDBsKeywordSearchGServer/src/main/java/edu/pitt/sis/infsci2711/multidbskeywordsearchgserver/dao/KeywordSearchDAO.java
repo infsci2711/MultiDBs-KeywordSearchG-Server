@@ -49,7 +49,7 @@ public class KeywordSearchDAO {
 
 			for(String term:terms){
 			result = engine
-					.execute("MATCH p=(a)-[:`BELONG_TO`*0..]->(b) Where a.value=~\"(?i).*"+term+".*\" and b.type='database' RETURN p");
+					.execute("MATCH p=(a)-[:`BELONG_TO`*0..]->(b) Where a.value=~\"(?i).*"+term+".*\" and b.type='database'  RETURN p");
 			// resultString = result.dumpToString();
 
 			// System.out.println(resultString);
@@ -93,7 +93,7 @@ public class KeywordSearchDAO {
 			db.shutdown();
 		}
 		
-		// sorting
+		//sorting
 		return resultSet;
 	}
 
