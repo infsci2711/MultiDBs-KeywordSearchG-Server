@@ -1,0 +1,15 @@
+@CHARSET "ISO-8859-1";
+#C1{
+	
+    width: 800px;
+    margin: 5px;
+    float: left;
+}
+
+#C2{
+	
+    width: 50px;
+    margin: 5px;
+    float: left;
+}
+
