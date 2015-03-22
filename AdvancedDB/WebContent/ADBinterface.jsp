@@ -129,7 +129,7 @@
 				class="img-rounded" alt="Cinque Terre" width=800px height=500px>
 				<div>
 					<form id="myform">
-						<table id="userdata" border="2" align="center">
+						<table id="userdata" border="0" align="center">
 
 							<thead>
 								<th>Record</th>
@@ -148,12 +148,8 @@
 		</tr>
 
 	</table>
-
-
-
-
-
-
-
+<footer>
+<p> Chen Jie | Chun-chung Yang | Yuan Qiu | Dancheng Zhang | Jing Xue | Chen Luo
+</footer>
 </body>
 </html>
