@@ -2,16 +2,25 @@ package edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.Map.Entry;
 
 import org.neo4j.cypher.ExecutionEngine;
 import org.neo4j.cypher.ExecutionResult;
+import org.neo4j.graphalgo.GraphAlgoFactory;
+import org.neo4j.graphalgo.PathFinder;
+import org.neo4j.graphalgo.WeightedPath;
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
+import org.neo4j.graphdb.PathExpanders;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.ResourceIterator;
@@ -23,6 +32,8 @@ import org.neo4j.graphdb.index.ReadableIndex;
 import org.neo4j.graphdb.index.UniqueFactory;
 import org.neo4j.kernel.TopLevelTransaction;
 import org.neo4j.tooling.GlobalGraphOperations;
+
+
 
 
 
@@ -39,7 +50,16 @@ public class Neo4j {
 	public static enum RelTypes implements RelationshipType{
 		//KNOW;
 		BELONG_TO;
-		
+	}
+	
+	public static enum link implements RelationshipType{
+		//columns link together
+		LINK;
+	}
+	
+	public static enum path implements RelationshipType{
+		//tables link together
+		PATH;
 	}
 
 	public Neo4j(){
@@ -50,8 +70,6 @@ public class Neo4j {
 		//Begin Transaction
 		//transction=graphDataService.beginTx();	
 	}
-	
-	
 	
 		
 	public Relationship createRel(Node first, Node second, String relType,GraphDatabaseService graphDataService){
@@ -66,24 +84,68 @@ public class Neo4j {
 			  transaction.acquireWriteLock(second);
 			  
 			  Boolean created = false;
-			  for(Relationship r : first.getRelationships(RelTypes.BELONG_TO)) {
+			  
+			  //judge relationship type
+			  RelationshipType relationship;
+			  Label label = DynamicLabel.label( "Column" );
+			  if(first.hasLabel(label) && second.hasLabel(label)){
+				  relationship=link.LINK;
+			  }else{
+				  relationship=RelTypes.BELONG_TO;
+			  }
+			  
+			  for(Relationship r : first.getRelationships(relationship)) {
 			    if(r.getOtherNode(first).equals(second)) { // put other conditions here, if needed
-			     
 			      created = true;
 			      break;
 			    }
 			  }
 			  if(!created) {
-			    relation=first.createRelationshipTo(second,RelTypes.BELONG_TO );
+			    relation=first.createRelationshipTo(second,relationship );
 			    relation.setProperty("RelationType", relType);
 			  }
 			  transaction.success();
+			 
+			  return relation;
+		  }
+	  }
+	
+	//relationship between tables
+	public Relationship createRel(Node first, Node second, String relType,int cost,GraphDatabaseService graphDataService){
+		  Relationship relation = null;
+		  try(Transaction transaction =  graphDataService.beginTx()){
+			  
+			  ReadableIndex<Node> autoNodeIndex = graphDataService.index().getNodeAutoIndexer().getAutoIndex();
+			  //Node n = autoNodeIndex.get("name", "Neo").getSingle();
+			  //Node a = autoNodeIndex.get("name", "The Architect").getSingle();
+			  
+			  transaction.acquireWriteLock(first);
+			  transaction.acquireWriteLock(second);
+			  
+			  Boolean created = false;
+			  
+			  
+			  RelationshipType relationship=path.PATH;
+		 
+			  for(Relationship r : first.getRelationships(relationship)) {
+			    if(r.getOtherNode(first).equals(second)) { // put other conditions here, if needed
+			      created = true;
+			      break;
+			    }
+			  }
+			  if(!created) {
+			    relation=first.createRelationshipTo(second,relationship );
+			    relation.setProperty("RelationType", relType);
+			    relation.setProperty("cost", cost);
+			  }
+			  transaction.success();
+			 
 			  return relation;
 		  }
 	  }
 	   
-     //create unique node
-	 public Node createUniqueFactory( String name, final String type,  final String label,GraphDatabaseService graphDataService )
+    //create unique node
+	 public Node createUniqueFactory( String name,final String type, final String label,GraphDatabaseService graphDataService )
 	    {
 	        // START SNIPPET: prepareUniqueFactory
 	        try( Transaction tx =  graphDataService.beginTx())
@@ -124,6 +186,96 @@ public class Neo4j {
 	        }
 	        // END SNIPPET: prepareUniqueFactory
 	 }
+	 
+	 public Map<Set<Node>, Map<Relationship, Integer>>  FindShortestPath(Node start,Node end,List<Relationship> X,GraphDatabaseService graphDataService)
+	 {	
+		Map<Path, Integer> unsorted=new HashMap<>();
+		ValueComparatorPath bvc =  new ValueComparatorPath(unsorted);
+		TreeMap<Path, Integer> sorted=new TreeMap<>(bvc);
+		
+		 try ( Transaction tx =  graphDataService.beginTx() )
+		{
+	    Map<Relationship, Integer> map=new HashMap<>();
+	    Set<Node> nodes=new HashSet<>();
+	    Map<Set<Node>, Map<Relationship, Integer>> t=new HashMap<>();
+	    
+	    if(!X.isEmpty()){
+	    	int maxDepth=20;
+	    	
+	    	PathFinder<Path> finder=GraphAlgoFactory.allSimplePaths(PathExpanders.forType( path.PATH ), maxDepth);
+	        Iterator path=finder.findAllPaths(start, end).iterator();
+	   
+	        
+	    int k=0;
+	    while(path.hasNext()){
+	    	Path p=(Path) path.next();
+	    	
+	    	int cost = 0;
+	    	for(Relationship rel:p.relationships()){
+	    		cost+=(int) rel.getProperty("cost");
+	    	}
+	    	
+	    	unsorted.put(p, cost);	
+	    	k++;
+	    }
+	    
+	    sorted.putAll(unsorted);
+	   
+	    
+	    Iterator it=sorted.entrySet().iterator();
+	    int a=0;
+	    while(it.hasNext() && a<6){
+	    	a++;
+	    	Map.Entry pair=(Entry) it.next();
+	    	Path ride=(Path) pair.getKey();
+	    	int w=(int) pair.getValue();
+	    	
+	    	double tcost=0;
+	    	for(Relationship rel:ride.relationships()){
+	    		if(X.contains(rel)){
+	    			break;
+	    		}
+				int cost=(int) rel.getProperty("cost");
+				tcost+=cost;
+				map.put(rel, cost);
+	    	}
+	    	
+	    	if(tcost==w){
+	    		for(Node node:ride.nodes()){
+	    			nodes.add(node);
+	    		}
+	    		t.put(nodes, map); 
+	    		break;
+	    	}		
+	    }
+	    }else{
+	    	PathFinder<WeightedPath> finder = GraphAlgoFactory.dijkstra(
+				    PathExpanders.forType( path.PATH ), "cost" );
+		    WeightedPath path = finder.findSinglePath( start, end );
+		    int weight=(int) path.weight();
+			//path.iterator();
+			for(Relationship rel:path.relationships()){	
+				int cost=(int) rel.getProperty("cost");
+				map.put(rel, cost);	
+			}
+			
+			for(Node node:path.nodes()){
+				nodes.add(node);
+			}
+			t.put(nodes, map);
+	    }
+	    
+		tx.success();
+		tx.close();
+		
+		return t;
+		
+				
+	   }
+	 }
+	 
+	 
+	 
 
 	    public Node get( String name,  UniqueFactory<Node> factory,GraphDatabaseService graphDataService )
 	    {

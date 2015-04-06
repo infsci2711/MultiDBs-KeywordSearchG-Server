@@ -1,10 +1,17 @@
 package edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.models;
 
+import java.util.List;
+import java.util.Map;
+
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+
 public class ResultModel {
 	private String record="";
 	private String column="";
 	private String table="";
 	private String database="";
+		
 
 
 	public ResultModel() {
