@@ -1,0 +1,161 @@
+<!DOCTYPE HTML>
+<!--
+	Striped 2.5 by HTML5 Up!
+	html5up.net | @n33co
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Striped by HTML5 UP</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400italic,700|Open+Sans+Condensed:300,700" rel="stylesheet" />
+		<script src="js/jquery.min.js"></script>
+		<script src="js/skel.min.js"></script>
+		<script src="js/skel-panels.min.js"></script>
+		<script src="js/init.js"></script>
+		<noscript>
+			<link rel="stylesheet" href="css/skel-noscript.css" />
+			<link rel="stylesheet" href="css/style.css" />
+			<link rel="stylesheet" href="css/style-desktop.css" />
+			<link rel="stylesheet" href="css/style-wide.css" />
+		</noscript>
+		<!--[if lte IE 9]><link rel="stylesheet" href="css/ie9.css" /><![endif]-->
+		<!--[if lte IE 8]><script src="js/html5shiv.js"></script><link rel="stylesheet" href="css/ie8.css" /><![endif]-->
+		<!--[if lte IE 7]><link rel="stylesheet" href="css/ie7.css" /><![endif]-->
+	</head>
+	<!--
+		Note: Set the body element's class to "left-sidebar" to position the sidebar on the left.
+		Set it to "right-sidebar" to, you guessed it, position it on the right.
+	-->
+	<body class="left-sidebar">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Content -->
+					<div id="content">
+						<div id="content-inner">
+					
+							<!-- Post -->
+								<article class="is-post is-post-excerpt">
+									<header>
+										<!--
+											Note: Titles and bylines will wrap automatically when necessary, so don't worry
+											if they get too long. You can also remove the "byline" span entirely if you don't
+											need a byline.
+										-->
+										<h2><a href="#">API Documentation</a></h2>
+										
+									</header>
+									<div class="info">
+										<!--
+											Note: The date should be formatted exactly as it's shown below. In particular, the
+											"least significant" characters of the month should be encapsulated in a <span>
+											element to denote what gets dropped in 1200px mode (eg. the "uary" in "January").
+											Oh, and if you don't need a date for a particular page or post you can simply delete
+											the entire "date" element.
+											
+										-->
+										<span class="date"><span class="month">Apr<span>uary</span></span> <span class="day">7</span><span class="year">, 2015</span></span>
+										<!--
+											Note: You can change the number of list items in "stats" to whatever you want.
+										-->
+										<ul class="stats">
+											<li><a href="#" class="fa fa-comment">16</a></li>
+											<li><a href="#" class="fa fa-heart">32</a></li>
+											<li><a href="#" class="fa fa-twitter">64</a></li>
+											<li><a href="#" class="fa fa-facebook">128</a></li>
+										</ul>
+                                                                        </div>
+                                                                        <span class="byline">What is REST</span>
+									<p>
+                                                                                REST, or expressed in the full form, called Representational State Transfer has become the standard design architecture for developing web APIs. It uses HTTP request methods to layer itself into the existing HTTP architecture. There are four options for REST:
+                                                                                <strong>Get:</strong> used to the basic read requests to the server
+                                                                                <strong>Put:</strong> used to fix the existing object on the server
+                                                                                <strong>Post: </strong>used to create a new object on the server
+                                                                                <strong>Delete:</strong> used to remove an object from the server
+                                                                                By creating URL endpoints that take advantages of these operations, the RESTful API is soon built.
+									</p>
+                                                                        
+                                                                        <span class="byline">What is API</span>
+                                                                        <p>
+                                                                                API in this case, stands for Application Programming Interface, allowing for publicly exposed methods of an application to be accessed and manipulated outside of the program itself. A common usage of an API is when you wish to obtain data from an application without having to actually visit the application itself. To allow this action to take place, the application has published an API that specifically allows for foreign applications to make calls to its data and return said data to the user from inside of the external application. On the web, this is often done through the use of RESTful URIs.
+									</p>
+                                                                        
+                                                                        <span class="byline">Method</span>
+                                                                        
+                                                                        <ul class='style1'>
+                                                                            <li class='blue'><strong>Result/[your query string]: </strong> &nbsp;A single or multiple keyword search on neo4j database</li>
+                                                                            
+                                                                            
+                                                                        </ul>   
+									
+                                                                        
+                                                                        <span class="byline">Sample</span>
+                                                                        <p>
+                                                                               The path is http://54.174.121.196:7654/Result/ Result in this path represents the query string. 
+                                                                                Method here we used is:
+                                                                                <strong>resultDB.getRecord(),</strong>
+                                                                                <strong>resultDB.getColumn(),</strong>
+                                                                                <strong>resultDB.getTable(),</strong>
+                                                                                <strong>resultDB.getDatabase(), </strong>
+                                                                                to grab the data from the Neo4j. The input parameter is the string (e.g. Pittsburgh). The output is the table contains record, column, table and database from Neo4j.
+
+                                                                                
+                                                                                output parameter: a json format string like [{"column":"c_name","database":"homework2","record":"Pittsburgh","table":"city"}]. 
+									</p>
+								</article>
+						
+							
+			                      
+
+				<!-- Sidebar -->
+					<div id="sidebar">
+					
+						<!-- Logo -->
+							<div id="logo">
+								<h1>Geyword</h1>
+							</div>
+					
+						<!-- Nav -->
+							<nav id="nav">
+								<ul>
+                                                                        <li><a href="index.html">Home</a></li>
+                                                                        <li><a href="#">Website structure</a></li>
+									<li><a href="#">Contact Us</a></li>
+								</ul>
+							</nav>
+
+						
+					
+						<!-- Text -->
+							<section class="is-text-style1">
+								<div class="inner">
+									<p>
+										<strong>Geyword:</strong> A free and easy search website built by us. Wanna have a look? <a href="http://54.174.121.196/">Geyword</a>
+									</p>
+								</div>
+							</section>
+					
+						
+                                                
+						
+                                                
+						
+						<!-- Copyright -->
+							<div id="copyright">
+								<p>
+									&copy; 2013 An Untitled Site.<br />
+									Images: <a href="http://n33.co">n33</a>, <a href="http://fotogrph.com">fotogrph</a><br />
+									Design: <a href="http://html5up.net/">HTML5 UP</a>
+								</p>
+							</div>
+
+					</div>
+
+			</div>
+
+	</body>
+</html>
