@@ -20,11 +20,7 @@ public class ResultService {
 	
 	public List<JoinModel> joinTables(List<ResultModel> result){
 		List<JoinModel> joint = KeywordSearchDAO.joinResult(result);
-		System.out.println(joint.size()+"-------ResultService");
-		System.out.println("Model In The Server");
-		for(JoinModel m:joint){
-			System.out.println("Rank: "+m.getRank()+"Cost: "+m.getCost());
-		}
+		
 		
 		return joint;
 	}

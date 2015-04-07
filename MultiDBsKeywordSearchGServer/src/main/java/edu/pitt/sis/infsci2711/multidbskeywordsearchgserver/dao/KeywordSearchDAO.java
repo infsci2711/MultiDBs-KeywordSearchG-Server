@@ -131,7 +131,7 @@ public class KeywordSearchDAO {
 						for(Relationship rel:r){
 							String temp=(String) rel.getProperty("RelationType");
 							relations.add(temp);
-							System.out.println(temp);
+							//System.out.println(temp);
 						}
 						
 						JoinModel model = new JoinModel(relations,cost,rank);
@@ -147,7 +147,7 @@ public class KeywordSearchDAO {
 		}finally{
 			db.shutdown();
 		}
-		System.out.println(joinResult.size()+"-----------DAO");
+		
 		return joinResult;
 	}
 	
@@ -161,10 +161,7 @@ public class KeywordSearchDAO {
 		String[] terms=str.split(" ");
 		for(int i=0;i<resultSet.size();i++)
 		{
-			System.out.print(resultSet.get(i).getRecord()+"\t");
-			System.out.print(resultSet.get(i).getColumn()+"\t");
-			System.out.print(resultSet.get(i).getTable()+"\t");
-			System.out.print(resultSet.get(i).getDatabase()+"\n");
+			
 			String r=resultSet.get(i).getRecord();
 			String c=resultSet.get(i).getColumn();
 			String t=resultSet.get(i).getTable();
@@ -190,7 +187,7 @@ public class KeywordSearchDAO {
 				}
 			}
 			rlist[i]=new Result(r,c,t,d,scores[0],scores[1],scores[2],scores[3]);
-			System.out.println(rlist[i].score);
+			
 		}
 		Arrays.sort(rlist, new ResultSort());
 		resultSet=new ArrayList<ResultModel>();
@@ -198,10 +195,7 @@ public class KeywordSearchDAO {
 		for(int i=0;i<rlist.length;i++)
 		{
 			resultSet.add(rlist[i].result);
-			System.out.print(resultSet.get(i).getRecord()+"\t");
-			System.out.print(resultSet.get(i).getColumn()+"\t");
-			System.out.print(resultSet.get(i).getTable()+"\t");
-			System.out.print(resultSet.get(i).getDatabase()+"\n");
+			
 		}
 		return resultSet;
 	}
