@@ -71,6 +71,10 @@
 	{
 		margin: 0 0 2em 0;
 	}
+        
+        table{
+                text-align:justify;
+        }
 	
 	blockquote
 	{
@@ -196,7 +200,9 @@
 	p, ul, ol, dl, table
 	{
 		margin-bottom: 1em;
-	}
+	
+		text-align: justify;
+}
 	
 	section,
 	article
