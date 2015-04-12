@@ -24,9 +24,11 @@ import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.helpers.collection.IteratorUtil;
 
+import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.models.AllModel;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.models.JoinModel;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.models.ResultModel;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.Config;
+import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.Neo4j;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.join;
 
 public class KeywordSearchDAO {
@@ -36,6 +38,7 @@ public class KeywordSearchDAO {
 	String nodeResult;
 	String rows = "";
 	private static GraphDatabaseService db = new GraphDatabaseFactory().newEmbeddedDatabase(DB_PATH);
+   // static Neo4j neo=new Neo4j();
 
 	public static void main(String[] args) {
 		KeywordSearchDAO javaQuery = new KeywordSearchDAO();
@@ -89,28 +92,28 @@ public class KeywordSearchDAO {
 						break;
 					}
 				}
-				resultSet.add(new ResultModel(record, column, table, database));
+				resultSet.add(new ResultModel(record, column, table, database,term));
 			}
 		  }
 			ignored.success();
+			//ignored.close();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			//db.shutdown();
-		}
+		} 
 		//sorting
-		resultSet=sort(resultSet,str);
+		//resultSet=sort(resultSet,str);
 		//joinResult(resultSet,db);
 		
 		
 		return resultSet;
 	}
 	
-	public static List<JoinModel> joinResult(List<ResultModel> resultSet){
+	public static AllModel joinResult(List<ResultModel> resultSet){
 		join join= new join();
 		List<Map<Map<List<Node>, List<Relationship>>,Integer>> sort =join.join(resultSet, db);
 		List<JoinModel> joinResult =new ArrayList<>();
+		AllModel all ;
 		
 		try(Transaction tx=db.beginTx()){
 			int rank=1;
@@ -141,20 +144,23 @@ public class KeywordSearchDAO {
 				}	
 			}
 			tx.success();
-			
+			tx.close();
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			db.shutdown();
+			//db.shutdown();
+			//neo.shutDown(db);
 		}
-		
-		return joinResult;
+		all=new AllModel(resultSet,joinResult);
+		System.out.println("-----DAO in Server");
+		System.out.println(all);
+		return all;
 	}
-	
+}
 	
 	
 	//Ranking
-	public static List<ResultModel> sort(List<ResultModel> resultSet, String str)
+	/*public static List<ResultModel> sort(List<ResultModel> resultSet, String str)
 	{
 		str=str.toLowerCase();
 		Result[] rlist=new Result[resultSet.size()];
@@ -231,4 +237,4 @@ class ResultSort implements Comparator{
         return 0;
     }
 
-}
+}*/

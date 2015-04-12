@@ -17,8 +17,6 @@ public class JoinAPIModel {
 		
 	}
 	
-	
-	
 	public void setRelations(List<String> relations) {
 		this.relations = relations;
 	}

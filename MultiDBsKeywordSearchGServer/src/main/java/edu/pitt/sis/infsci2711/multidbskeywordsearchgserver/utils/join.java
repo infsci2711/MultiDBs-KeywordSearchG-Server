@@ -102,6 +102,7 @@ public class join {
 		
 		
 		tx.success();
+		//tx.close();
 		
 		return sort;		
 		

@@ -11,18 +11,23 @@ public class ResultModel {
 	private String column="";
 	private String table="";
 	private String database="";
-		
+	private String keyword="";	
 
 
 	public ResultModel() {
 	}
 
-	public ResultModel(String record, String column, String table, String database) {
+	public ResultModel(String record, String column, String table, String database,String keyword) {
 		this.setRecord(record);
 		this.setColumn(column);
 		this.setTable(table);
 		this.setDatabase(database);
+		this.setKeyword(keyword);
 
+	}
+	
+	public void setKeyword(String keyword){
+		this.keyword=keyword;
 	}
 	
 	public void setRecord(String record) {
@@ -39,6 +44,10 @@ public class ResultModel {
 	
 	public void setDatabase(String database) {
 		this.database = database;
+	}
+	
+	public String getKeyword(){
+		return this.keyword;
 	}
 
 	public String getRecord() {

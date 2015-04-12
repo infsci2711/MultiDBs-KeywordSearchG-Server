@@ -51,7 +51,7 @@ public class Kruskal {
 		    graph.put(node, relation);
 		   
 			tx.success();
-			tx.close();
+			//tx.close();
 			return graph;
 		}
 			

@@ -109,7 +109,7 @@ public class SteinerTree {
 			
 			
 			tx.success();
-			tx.close();
+			//tx.close();
 			return steinerTree;
 		}
 	}
@@ -187,7 +187,7 @@ public class SteinerTree {
 				}
 			}
 			tx.success();
-			tx.close();
+			//tx.close();
 		}
 		return links;
 	}
@@ -209,7 +209,7 @@ public class SteinerTree {
 				}
 			}
 			tx.success();
-			tx.close();
+			//tx.close();
 			return cost;
 		}
 	}
@@ -293,7 +293,7 @@ public class SteinerTree {
 			}	
 		}
 		tx.success();
-		tx.close();
+		//tx.close();
 		return A;		
 	}
 }

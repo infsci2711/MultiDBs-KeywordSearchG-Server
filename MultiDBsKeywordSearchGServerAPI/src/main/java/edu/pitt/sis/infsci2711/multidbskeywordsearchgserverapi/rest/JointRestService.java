@@ -11,10 +11,15 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.neo4j.helpers.collection.Iterables;
+
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.ResultService;
+import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.models.AllModel;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.models.JoinModel;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.models.ResultModel;
+import edu.pitt.sis.infsci2711.multidbskeywordsearchgserverapi.viewModels.AllAPIModel;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserverapi.viewModels.JoinAPIModel;
+import edu.pitt.sis.infsci2711.multidbskeywordsearchgserverapi.viewModels.ResultAPIModel;
 
 
 
@@ -40,13 +45,32 @@ public class JointRestService {
 
 		try {
 			List<ResultModel> resultSet =  resultService.find(str);
-            List<JoinModel> joinSet = resultService.joinTables(resultSet);
+            AllModel joinSet = resultService.joinTables(resultSet);
 			if (joinSet != null) {
-				List<JoinAPIModel> join = convertDbToViewModel(joinSet);
-				GenericEntity<List<JoinAPIModel>> entity = new GenericEntity<List<JoinAPIModel>>(
+				List<ResultAPIModel>result =RconvertDbToViewModel( joinSet.getSearchResult());
+				List<JoinAPIModel> joint =JconvertDbToViewModel( joinSet.getJoinResult());
+				AllAPIModel join = convertDbToViewModel(result,joint);
+				
+
+				
+				
+				//System.out.println(join.getJoinResult());
+				GenericEntity entity = new GenericEntity<AllAPIModel>(
 						join) {
 				};
-				
+//				AllAPIModel m=entity.getEntity();
+//				System.out.println("-----AllModel !!!!entity!!!! in ServerAPI");
+//				for(ResultAPIModel r:m.getSearchResult()){
+//					System.out.println(r.getKeyword());
+//					System.out.println(r.getDatabase());
+//					}
+//				for(JoinAPIModel j:m.getJoinResult()){
+//					System.out.println(j.getRelations());
+//				}
+//				
+//				System.out.println("-------DONE-------");
+//				
+//				System.out.println(result.toString());
 				return Response.status(200).entity(entity).build();
 			}
 			return Response.status(404).entity("Person not found").build();
@@ -56,8 +80,8 @@ public class JointRestService {
 		}
 
 	}
-
-	private List<JoinAPIModel> convertDbToViewModel(
+    //Join Result
+	private List<JoinAPIModel> JconvertDbToViewModel(
 			final List<JoinModel> joinSet) {
 		List<JoinAPIModel> join = new ArrayList<JoinAPIModel>();
 		for (JoinModel joinDB : joinSet) {
@@ -69,6 +93,27 @@ public class JointRestService {
 
 	private JoinAPIModel convertDbToViewModel(final JoinModel joinDB) {
 		return new JoinAPIModel(joinDB.getRelations(),joinDB.getCost(), joinDB.getRank());
+	}
+	
+	//Search Result
+	private List<ResultAPIModel> RconvertDbToViewModel(
+			final List<ResultModel> resultSet) {
+		List<ResultAPIModel> result = new ArrayList<ResultAPIModel>();
+		for (ResultModel resultDB : resultSet) {
+			result.add(convertDbToViewModel(resultDB));
+		}
+
+		return result;
+	}
+
+	private ResultAPIModel convertDbToViewModel(final ResultModel resultDB) {
+		return new ResultAPIModel(resultDB.getRecord(),resultDB.getColumn(),
+				resultDB.getTable(),resultDB.getDatabase(),resultDB.getKeyword());
+	}
+	
+	
+	private AllAPIModel convertDbToViewModel(final List<ResultAPIModel> result, final List<JoinAPIModel> join){
+		return new AllAPIModel(result,join);
 	}
 }
 
