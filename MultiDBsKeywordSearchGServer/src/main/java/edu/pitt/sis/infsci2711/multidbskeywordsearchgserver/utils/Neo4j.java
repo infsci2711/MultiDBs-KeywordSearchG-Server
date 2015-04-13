@@ -252,6 +252,7 @@ public class Neo4j {
 	    	PathFinder<WeightedPath> finder = GraphAlgoFactory.dijkstra(
 				    PathExpanders.forType( path.PATH ), "cost" );
 		    WeightedPath path = finder.findSinglePath( start, end );
+		    if(path!=null){
 		    int weight=(int) path.weight();
 			//path.iterator();
 			for(Relationship rel:path.relationships()){	
@@ -263,10 +264,11 @@ public class Neo4j {
 				nodes.add(node);
 			}
 			t.put(nodes, map);
+		    }
 	    }
 	    
 		tx.success();
-		tx.close();
+		//tx.close();
 		
 		return t;
 		

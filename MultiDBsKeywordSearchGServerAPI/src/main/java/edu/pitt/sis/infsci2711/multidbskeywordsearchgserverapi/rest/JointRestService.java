@@ -92,7 +92,7 @@ public class JointRestService {
 	}
 
 	private JoinAPIModel convertDbToViewModel(final JoinModel joinDB) {
-		return new JoinAPIModel(joinDB.getRelations(),joinDB.getCost(), joinDB.getRank());
+		return new JoinAPIModel(joinDB.getRelations(),joinDB.getTables(),joinDB.getCost(), joinDB.getRank());
 	}
 	
 	//Search Result

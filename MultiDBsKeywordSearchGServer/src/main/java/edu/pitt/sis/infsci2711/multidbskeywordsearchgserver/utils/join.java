@@ -28,48 +28,19 @@ import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.models.ResultModel;
 
 public class join {
 	
-	public List<Map<Map<List<Node>, List<Relationship>>,Integer>> join(List<ResultModel> resultSet,GraphDatabaseService graphDataService ){
+	public List<Map<Map<List<Node>, List<Relationship>>,Integer>> join(List<Node> all,GraphDatabaseService graphDataService ){
 
 		
 		Transaction tx=graphDataService.beginTx();
 		
 		
-		ExecutionEngine engine = new ExecutionEngine(graphDataService);
-		ExecutionResult result;
+		
 		
 		
 		Map<List<String>, Integer> unsorted=new HashMap<>();
 		ValueComparatorList bvc =  new ValueComparatorList(unsorted);
 		TreeMap<List<String>,Integer> T=new TreeMap<>(bvc);
 		
-		
-		List<String> api = new ArrayList<>();
-        for(ResultModel model:resultSet){
-			String temp=model.getDatabase()+"."+model.getTable();
-			api.add(temp);
-		}
-        
-		Set<String> apis=new HashSet<>();  //make sure the unique tables
-		for(int i=0;i<api.size();i++){
-			apis.add(api.get(i));
-		}
-		
-		
-		List<Node> all=new ArrayList<>();
-		
-		//find all the target nodes
-		for(String tab:apis){
-			String[] temp=tab.split("\\.");
-			
-			result = engine
-					.execute("MATCH (n) where n.value='"+temp[1]+"' and n.parent='"+temp[0]+"' RETURN n");
-			Node node = null;
-			 for(Map<String,Object> tem : result){
-				 node=(Node) tem.get("n");
-				 all.add(node);
-				 
-			 }
-		}
 		
 		
 		int k=7;

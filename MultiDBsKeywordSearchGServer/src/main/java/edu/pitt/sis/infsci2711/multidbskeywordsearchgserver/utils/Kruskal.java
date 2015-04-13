@@ -29,7 +29,8 @@ public class Kruskal {
 			
 			ExecutionEngine engine = new ExecutionEngine(graphDataService);
 			ExecutionResult result;
-			List<Node> node=new ArrayList<>();
+			Set<Node> node=new HashSet<>();
+			List<Node> node2 = new ArrayList<>();
 			List<Relationship> relation=new ArrayList<>();
 			
 		    Iterator it = sorted.entrySet().iterator();
@@ -48,7 +49,8 @@ public class Kruskal {
 				 
 		    	n++;
 		    }
-		    graph.put(node, relation);
+		    node2.addAll(node);
+		    graph.put(node2, relation);
 		   
 			tx.success();
 			//tx.close();

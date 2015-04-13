@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -111,52 +112,175 @@ public class KeywordSearchDAO {
 	
 	public static AllModel joinResult(List<ResultModel> resultSet){
 		join join= new join();
-		List<Map<Map<List<Node>, List<Relationship>>,Integer>> sort =join.join(resultSet, db);
+		ExecutionEngine engine = new ExecutionEngine(db);
+		ExecutionResult result;
 		List<JoinModel> joinResult =new ArrayList<>();
-		AllModel all ;
+		Neo4j neo=new Neo4j();
+		AllModel allModel = new AllModel() ;
 		
-		try(Transaction tx=db.beginTx()){
-			int rank=1;
-			for(Map<Map<List<Node>, List<Relationship>>,Integer> list:sort){
-				Iterator it=list.entrySet().iterator();
-				
-				while(it.hasNext()){
-					Map.Entry pair=(Entry) it.next();
-					Map<List<Node>, List<Relationship>> g=(Map<List<Node>, List<Relationship>>) pair.getKey();
-					int cost=(int) pair.getValue();
-					Iterator ite=g.entrySet().iterator();
-					while(ite.hasNext()){
-						Map.Entry p=(Entry) ite.next();
-						List<Relationship> r=(List<Relationship>) p.getValue();
-						List<Node> n = (List<Node>) p.getKey();
-			
-						List<String> relations=new ArrayList<>();
-						for(Relationship rel:r){
-							String temp=(String) rel.getProperty("RelationType");
-							relations.add(temp);
-							//System.out.println(temp);
-						}
-						
-						JoinModel model = new JoinModel(relations,cost,rank);
-						joinResult.add(model);
-						}
-					rank++;
-				}	
-			}
-			tx.success();
-			tx.close();
-		}catch(Exception e){
-			e.printStackTrace();
-		}finally{
-			//db.shutdown();
-			//neo.shutDown(db);
+		//get all the search tables
+		List<String> api = new ArrayList<>();
+        for(ResultModel model:resultSet){
+			String temp=model.getDatabase()+"."+model.getTable();
+			if(!model.getTable().isEmpty()){
+				api.add(temp);
+			}	
 		}
-		all=new AllModel(resultSet,joinResult);
-		System.out.println("-----DAO in Server");
+        
+        //System.out.println(api.get(0).toString());
+        
+		Set<String> apis=new HashSet<>();  //make sure the unique tables
+		for(int i=0;i<api.size();i++){
+			apis.add(api.get(i));
+		}
+		List<Node> all=new ArrayList<>();
+		//find all the target nodes
+		for(String tab:apis){
+			String[] temp=tab.split("\\.");
+			result = engine
+					.execute("MATCH (n) where n.value='"+temp[1]+"' and n.parent='"+temp[0]+"' RETURN n");
+			Node node = null;
+			 for(Map<String,Object> tem : result){
+				 node=(Node) tem.get("n");
+				 all.add(node);	 
+			 }
+		}
+		System.out.println("---------Pls Print Out ALL-----------");
 		System.out.println(all);
-		return all;
+		
+		//Cluster
+		Map<Integer, List<Node>> map = new HashMap<>();
+		List<Relationship> X = new ArrayList<>();
+		List<Node> t1 = new ArrayList<>();
+		
+			t1.add(all.get(0));
+			map.put(0, t1);
+		System.out.println(map+"-----------------111111");
+		
+		int j=0;
+		
+		for(int i=1;i<all.size();i++){
+			Boolean flag=false;
+			Iterator it = map.entrySet().iterator();
+			while(it.hasNext()){
+				Map.Entry pair = (Entry) it.next();
+				int num = (int) pair.getKey();
+				List<Node> cluster = (List<Node>) pair.getValue();
+				System.out.println("2");
+				System.out.println(cluster.get(0));
+				System.out.println(all.get(i));
+				Map<Set<Node>, Map<Relationship, Integer>>  temp=neo.FindShortestPath(cluster.get(0),all.get(i),X,db);
+				System.out.println(temp+" temp is here-------------");
+				if(!temp.isEmpty()){
+					flag=true;
+					System.out.println(flag+"--------1");
+					List<Node> tmp1 = new ArrayList<>();
+					tmp1.addAll(cluster);
+					tmp1.add(all.get(i));
+					System.out.println("4");
+					map.put(num, tmp1);
+					System.out.println("---------flag=1---------"+map);
+					break;
+				}
+			}
+			System.out.println("------New Cluster");
+			if(flag==false){
+				System.out.println("3");
+				j++;
+				List<Node> tmp2 = new ArrayList<>();
+				tmp2.add(all.get(i));	
+				System.out.println("5");
+				map.put(j, tmp2);
+				System.out.println("---------flag=2---------"+map);
+			}
+			
+		}
+		
+		
+		System.out.println("Hello,,,,,,,Cluster is HERE!!!!!----------");
+		System.out.println(map);
+		
+		Iterator iterator = map.entrySet().iterator();
+		while(iterator.hasNext()){
+			Map.Entry paire = (Entry) iterator.next();
+			List<Node> cluster = (List<Node>) paire.getValue();
+			
+			if(cluster.size()>1){
+				List<Map<Map<List<Node>, List<Relationship>>,Integer>> sort =join.join(cluster, db);
+				try(Transaction tx=db.beginTx()){
+					int rank=1;
+					for(Map<Map<List<Node>, List<Relationship>>,Integer> list:sort){
+						Iterator it=list.entrySet().iterator();
+						
+						while(it.hasNext()){
+							Map.Entry pair=(Entry) it.next();
+							Map<List<Node>, List<Relationship>> g=(Map<List<Node>, List<Relationship>>) pair.getKey();
+							int cost=(int) pair.getValue();
+							Iterator ite=g.entrySet().iterator();
+							while(ite.hasNext()){
+								Map.Entry p=(Entry) ite.next();
+								List<Relationship> r=(List<Relationship>) p.getValue();
+								List<Node> n = (List<Node>) p.getKey();
+					
+								List<String> relations=new ArrayList<>();
+								List<String> tables= new ArrayList<>();
+								for(Node nod:n){
+									String tmp = (String) nod.getProperty("value");
+									tables.add(tmp);
+								}
+								for(Relationship rel:r){
+									String temp=(String) rel.getProperty("RelationType");
+									relations.add(temp);
+									//System.out.println(temp);
+								}
+								
+								JoinModel model = new JoinModel(relations,tables,cost,rank);
+								joinResult.add(model);
+								}
+							rank++;
+						}	
+					}
+					tx.success();
+					tx.close();
+				}
+			}else{
+				
+				try(Transaction tx=db.beginTx()){
+								List<String> rel = new ArrayList<>();
+				List<String> tab = new ArrayList<>();
+				int cost=0;
+				int rank=0;
+				System.out.println("Can u See Remote here?--------------final");
+				tab.add((String) cluster.get(0).getProperty("value"));
+				
+				System.out.println((String) cluster.get(0).getProperty("value"));
+				JoinModel model = new JoinModel(rel,tab,cost,rank);
+				joinResult.add(model);
+				tx.success();
+				tx.close();
+			}
+				
+			}
+			
+		
+		}	
+		
+		
+		
+		
+		
+//		finally{
+//			//db.shutdown();
+//			//neo.shutDown(db);
+//		}
+		
+		allModel=new AllModel(resultSet,joinResult);
+		System.out.println("-----DAO in Server");
+		System.out.println(allModel);
+		return allModel;
 	}
-}
+	}
+
 	
 	
 	//Ranking

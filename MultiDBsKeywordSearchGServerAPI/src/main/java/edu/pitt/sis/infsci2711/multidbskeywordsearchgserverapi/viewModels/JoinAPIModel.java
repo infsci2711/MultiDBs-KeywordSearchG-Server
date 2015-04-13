@@ -6,15 +6,21 @@ public class JoinAPIModel {
 	private List<String> relations;
 	private int cost;
 	private int rank;
+	private List<String> tables;
 
 	public JoinAPIModel() {
 	}
 
-	public JoinAPIModel(List<String> relations, int cost, int rank) {
+	public JoinAPIModel(List<String> relations,List<String> tables, int cost, int rank) {
 		this.setRelations(relations);
+		this.setTables(tables);
 		this.setCost(cost);
 		this.setRank(rank);
 		
+	}
+	
+	public void setTables(List<String> tables){
+		this.tables = tables;
 	}
 	
 	public void setRelations(List<String> relations) {
@@ -29,7 +35,9 @@ public class JoinAPIModel {
 		this.rank = rank;
 	}
 	
-
+    public List<String> getTables(){
+    	return this.tables;
+    }
 	
 	public List<String> getRelations() {
 		return this.relations;
