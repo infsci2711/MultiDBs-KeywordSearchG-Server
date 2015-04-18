@@ -71,6 +71,7 @@ public class KeywordSearchDAO {
 				String column = "";
 				String table = "";
 				String database = "";
+				int id =0;
 
 				Path p = (Path) row.get("p");
 				Iterator<Node> path_it = p.nodes().iterator();
@@ -88,12 +89,13 @@ public class KeywordSearchDAO {
 						break;
 					case "database":
 						database = tmp.getProperty("value").toString();
+						id = (Integer) tmp.getProperty("ID");
 						break;
 					default:
 						break;
 					}
 				}
-				resultSet.add(new ResultModel(record, column, table, database,term));
+				resultSet.add(new ResultModel(id, record, column, table, database,term));
 			}
 		  }
 			ignored.success();
@@ -121,7 +123,7 @@ public class KeywordSearchDAO {
 		//get all the search tables
 		List<String> api = new ArrayList<>();
         for(ResultModel model:resultSet){
-			String temp=model.getDatabase()+"."+model.getTable();
+			String temp=Integer.toString(model.getID())+"."+model.getTable();
 			if(!model.getTable().isEmpty()){
 				api.add(temp);
 			}	
@@ -145,7 +147,7 @@ public class KeywordSearchDAO {
 				 all.add(node);	 
 			 }
 		}
-		System.out.println("---------Pls Print Out ALL-----------");
+		System.out.println("---------Pls Print Out ALL The Tables Needed to be Joint-----------");
 		System.out.println(all);
 		
 		//Cluster
@@ -155,7 +157,7 @@ public class KeywordSearchDAO {
 		
 			t1.add(all.get(0));
 			map.put(0, t1);
-		System.out.println(map+"-----------------111111");
+		//System.out.println(map+"-----------------111111");
 		
 		int j=0;
 		
@@ -166,32 +168,32 @@ public class KeywordSearchDAO {
 				Map.Entry pair = (Entry) it.next();
 				int num = (int) pair.getKey();
 				List<Node> cluster = (List<Node>) pair.getValue();
-				System.out.println("2");
-				System.out.println(cluster.get(0));
-				System.out.println(all.get(i));
+//				System.out.println("2");
+//				System.out.println(cluster.get(0));
+//				System.out.println(all.get(i));
 				Map<Set<Node>, Map<Relationship, Integer>>  temp=neo.FindShortestPath(cluster.get(0),all.get(i),X,db);
-				System.out.println(temp+" temp is here-------------");
+				//System.out.println(temp+" temp is here-------------");
 				if(!temp.isEmpty()){
 					flag=true;
-					System.out.println(flag+"--------1");
+					//System.out.println(flag+"--------1");
 					List<Node> tmp1 = new ArrayList<>();
 					tmp1.addAll(cluster);
 					tmp1.add(all.get(i));
-					System.out.println("4");
+					//System.out.println("4");
 					map.put(num, tmp1);
-					System.out.println("---------flag=1---------"+map);
+					//System.out.println("---------flag=1---------"+map);
 					break;
 				}
 			}
-			System.out.println("------New Cluster");
+			//System.out.println("------New Cluster");
 			if(flag==false){
-				System.out.println("3");
+				//System.out.println("3");
 				j++;
 				List<Node> tmp2 = new ArrayList<>();
 				tmp2.add(all.get(i));	
-				System.out.println("5");
+				//System.out.println("5");
 				map.put(j, tmp2);
-				System.out.println("---------flag=2---------"+map);
+				//System.out.println("---------flag=2---------"+map);
 			}
 			
 		}
@@ -250,7 +252,7 @@ public class KeywordSearchDAO {
 				List<String> tab = new ArrayList<>();
 				int cost=0;
 				int rank=0;
-				System.out.println("Can u See Remote here?--------------final");
+				System.out.println("Can u See Remote here?Just one node!!!!!--------------final");
 				tab.add((String) cluster.get(0).getProperty("value"));
 				
 				System.out.println((String) cluster.get(0).getProperty("value"));

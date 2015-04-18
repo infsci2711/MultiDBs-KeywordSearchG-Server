@@ -16,7 +16,7 @@ public class ResultService {
 	public List<ResultModel> find(final String str) throws SQLException, Exception {
 		List<ResultModel> result = KeywordSearchDAO.search(str);
 		System.out.println("-----ResultModel in Server");
-		System.out.println(result);
+		//System.out.println(result);
 		
 		return result;
 	}

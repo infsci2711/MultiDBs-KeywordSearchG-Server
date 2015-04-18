@@ -9,18 +9,23 @@ public class ResultAPIModel {
 	private String table="";
 	private String database="";
 	private String keyword="";
+	private int id =0;
 
 
 	public ResultAPIModel() {
 	}
 
-	public ResultAPIModel(String record, String column, String table, String database, String keyword) {
+	public ResultAPIModel(int id, String record, String column, String table, String database, String keyword) {
 		this.setRecord(record);
 		this.setColumn(column);
 		this.setTable(table);
 		this.setDatabase(database);
 		this.setKeyword(keyword);
-
+        this.setID(id);
+	}
+	
+	public void setID(int id){
+		this.id=id;
 	}
 	
 	public void setKeyword(String keyword){
@@ -41,6 +46,10 @@ public class ResultAPIModel {
 	
 	public void setDatabase(String database) {
 		this.database = database;
+	}
+	
+	public int getID(){
+		return this.id;
 	}
 
 	public String getKeyword(){

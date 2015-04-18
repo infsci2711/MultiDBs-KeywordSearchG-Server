@@ -228,7 +228,7 @@ public class Neo4j {
 	    Map<Set<Node>, Map<Relationship, Integer>> t=new HashMap<>();
 	    
 	    if(!X.isEmpty()){
-	    	int maxDepth=20;
+	    	int maxDepth=5;
 	    	
 	    	PathFinder<Path> finder=GraphAlgoFactory.allSimplePaths(PathExpanders.forType( path.PATH ), maxDepth);
 	        Iterator path=finder.findAllPaths(start, end).iterator();

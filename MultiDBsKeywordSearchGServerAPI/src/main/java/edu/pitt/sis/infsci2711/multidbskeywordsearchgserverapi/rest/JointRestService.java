@@ -107,7 +107,7 @@ public class JointRestService {
 	}
 
 	private ResultAPIModel convertDbToViewModel(final ResultModel resultDB) {
-		return new ResultAPIModel(resultDB.getRecord(),resultDB.getColumn(),
+		return new ResultAPIModel(resultDB.getID(), resultDB.getRecord(),resultDB.getColumn(),
 				resultDB.getTable(),resultDB.getDatabase(),resultDB.getKeyword());
 	}
 	

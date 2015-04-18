@@ -43,7 +43,7 @@ public class join {
 		
 		
 		
-		int k=7;
+		int k=3;
 		SteinerTree st=new SteinerTree();
 		Map<Map<List<Node>, List<Relationship>>,Integer> unsort=st.KBestSterinerTree(all,k, graphDataService);
 		
