@@ -1,9 +1,9 @@
 package edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils;
 
 import java.util.List;
-import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+
+
 public class DatasourceDBModel {
 	private int id;
 	private String dbType;
@@ -15,9 +15,10 @@ public class DatasourceDBModel {
 	private String title;
 	private String description;
 	
+
 	private List<DataSourceTableModel> tables;
 	
-	public DatasourceDBModel(){
+    public DatasourceDBModel(){
 		
 	}
 	
@@ -120,6 +121,7 @@ public class DatasourceDBModel {
 		this.description = description;
 	}
 
+
 	public List<DataSourceTableModel> getTables() {
 		return tables;
 	}
@@ -127,4 +129,5 @@ public class DatasourceDBModel {
 	public void setTables(List<DataSourceTableModel> tables) {
 		this.tables = tables;
 	}
+
 }

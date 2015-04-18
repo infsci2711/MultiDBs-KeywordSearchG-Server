@@ -171,6 +171,34 @@ public class Neo4j {
 	        // END SNIPPET: prepareUniqueFactory
 	    }
 	 
+	//create unique node for tables (ID)
+		 public Node createUniqueFactory( int ID, final String name,final String type, final String label,GraphDatabaseService graphDataService )
+		    {
+		        // START SNIPPET: prepareUniqueFactory
+		        try( Transaction tx =  graphDataService.beginTx())
+		        {
+		        	//indexa=graphDataService.index().forNodes(label);
+		            UniqueFactory<Node> result = new UniqueFactory.UniqueNodeFactory( graphDataService, label )
+		            //UniqueFactory.UniqueNodeFactory result = new UniqueFactory.UniqueNodeFactory( indexa )
+		            {
+		                @Override
+		                protected void initialize( Node created, Map<String, Object> properties )
+		                {
+		                    created.addLabel( DynamicLabel.label( label ) );
+		                    created.setProperty("ID", properties.get("ID"));
+		                    created.setProperty( "value", name );
+		                    created.setProperty( "type", type );   
+		                }
+		            };
+		            tx.success();
+		            Node node;
+		            node=result.getOrCreate("ID", ID); 
+		           // node=result.getOrCreate("type", type);
+		            return node;
+		        }
+		        // END SNIPPET: prepareUniqueFactory
+		    }
+	 
 	 //Create Normal node
 	 public Node createNode(String name, String type, String label,String parent,GraphDatabaseService graphDataService){
 		 try( Transaction tx =  graphDataService.beginTx())

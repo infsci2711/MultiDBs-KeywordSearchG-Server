@@ -7,11 +7,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.business.SQL2Neo4J;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.dao.KeywordSearchDAO;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.models.ResultModel;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.DataSourceTableModel;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.DatasourceColumnModel;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.DatasourceDBModel;
+import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.Neo4j;
+import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.QueryModel;
+import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.QueryResultModel;
+import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.RowModel;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.client.Entity;
@@ -23,49 +28,70 @@ import javax.ws.rs.core.MediaType;
 
 
 public class DataSourceService {
+	
 	public boolean initDataSource() throws SQLException, Exception {
+		
 		Client client = ClientBuilder.newClient();
 		WebTarget targetMetaStore = client.target("http://54.152.26.131:7654/").path("datasources");
 		Response response = targetMetaStore.request(MediaType.APPLICATION_JSON).get();
-		
-		//DatasourceDBModel responseMetaStore = response.readEntity(Stin.class);
-		
 	    List<DatasourceDBModel> responseMetaStore
         = response.readEntity(new GenericType<List<DatasourceDBModel>>(){});
+	    SQL2Neo4J sql2neo =new SQL2Neo4J();
+	    for (DatasourceDBModel db:responseMetaStore) {
+		int did = db.getId();
 		
-	    
-	    for (DatasourceDBModel tt:responseMetaStore) {
-		int did = tt.getId();
-		String dbName = tt.getDbName();
-		
-		
-		
-		System.out.println(dbName);
-		List<DataSourceTableModel> tablesVM =  tt.getTables();
-		//List<TableModel> tables = convertViewModelToTab(tablesVM);
-		//List<ColumnViewModel> colsVM = new ArrayList<>();
-		//Map<String, List<String>> tab_col = new LinkedHashMap<>();
+		if(did!=1 && did!=2 && did!=16){
+		String dbName = db.getDbName();
+		List<DataSourceTableModel> tables =  db.getTables();
 		Map<String, List<String>> col_val = new LinkedHashMap<>();
 		Map<String, Map<String, List<String>>> data = new HashMap<>();
 		
 		
-		for(DataSourceTableModel tableVM : tablesVM){
-			String tableName = tableVM.getTableName();
-			List<DatasourceColumnModel> colsVM = tableVM.getColumns();
+		for(DataSourceTableModel table : tables){
+			String tableName = table.getTableName();
+			List<DatasourceColumnModel> cols = table.getColumns();
 			List<String> columns = new ArrayList<>();
-			for(DatasourceColumnModel col:colsVM){
+			for(DatasourceColumnModel col:cols){
 				String columnName = col.getColumnName();
 				String tabcol = tableName+"."+columnName;
 				columns.add(columnName);
-				//111 List<String> values = getValue(did, tableName, columnName);
-				//111 col_val.put(columnName,values);
-				System.out.println(tabcol);
+				List<String> values = getValue(did, tableName, columnName);
+				col_val.put(columnName,values);
 			}
-			//tab_col.put(tableName, columns);
-			//111 data.put(tableName, col_val);
+			data.put(tableName, col_val);
 		}
+		sql2neo.add(did, dbName, data);
+	    }
 	    }
 		//System.out.println(responseMetaStore.readEntity(String.class));
+	    
 		return false;
 	}
+	
+	//send request to PrestoDB
+		public List<String> getValue(int did, String tableName,String columnName){
+			
+			String query="Select "+columnName+" from "+did+"."+tableName+"";
+			//String query = "select aid from 19.test";
+			QueryModel QueryModel = new QueryModel();
+			QueryModel.setQuery(query);
+			List<String> values = new ArrayList<>();
+			System.out.println(query);
+			Client client= ClientBuilder.newClient();
+			WebTarget target = client.target("http://54.174.80.167:7654/");
+			target = target.path("Query/");
+			Response response = target.request(MediaType.APPLICATION_JSON)
+		             .put(Entity.entity(QueryModel, MediaType.APPLICATION_JSON),Response.class);
+			System.out.println(response);
+			QueryResultModel qresult=response.readEntity(QueryResultModel.class);
+			System.out.println(qresult);
+			RowModel[] r=qresult.getData();
+			System.out.println(r);
+			for(int i=0; i<r.length;i++){
+				values.add(r[i].getRow()[0]);	
+			}
+			
+			return values;	
+		}
+		
 }
