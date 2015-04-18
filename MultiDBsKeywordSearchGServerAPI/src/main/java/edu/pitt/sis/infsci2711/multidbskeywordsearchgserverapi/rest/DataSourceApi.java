@@ -1,12 +1,16 @@
 package edu.pitt.sis.infsci2711.multidbskeywordsearchgserverapi.rest;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.DataSourceService;
+import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.DatasourceDBModel;
+import edu.pitt.sis.infsci2711.multidbskeywordsearchgserverapi.viewModels.DatasourceDBViewModel;
 
 
 
@@ -35,4 +39,32 @@ public class DataSourceApi {
 		
 	}
 	
+	
+	@Path("add/")
+	@PUT
+    @Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response add(final DatasourceDBViewModel query) {
+		
+		DataSourceService service = new DataSourceService();
+		
+		try {
+			boolean queryResult = service.add(convertViewModelToDB(query));
+			if(!queryResult)
+			{
+				return Response.status(500).entity("{\"error\":\"please check your input and try again\"}").build();
+			}
+			return Response.status(200).entity("{\"success\":\"the record has been saved\"}").build();
+		} catch (Exception e) {
+			//return Response.status(500).build();
+			String errmsg=e.getCause()==null?e.getMessage():e.getCause().getMessage();
+			return Response.status(500).entity("{\"error\":\""+e.getClass().getSimpleName()+"\",\"message\":\""+errmsg+"\"}").build();
+		}
+		
+	}
+	
+	
+	private DatasourceDBModel convertViewModelToDB(final DatasourceDBViewModel model) {
+		return new DatasourceDBModel(Integer.valueOf(model.getId()),model.getIP(),Integer.valueOf(model.getPort()),model.getDBType(),model.getUsername(),model.getPassword(),model.getDBname());
+	}
 }

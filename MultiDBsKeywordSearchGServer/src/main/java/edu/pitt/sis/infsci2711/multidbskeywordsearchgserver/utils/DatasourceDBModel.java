@@ -49,6 +49,21 @@ public class DatasourceDBModel {
 		this.setDescription(descripiton);
 	}
 	
+	public DatasourceDBModel(int id, final String ipAdress, final int port, final String dbType,
+			final String username, final String password, final String dbName) {
+		this.setId(id);
+		this.setDbType(dbType);
+		this.setIpAddress(ipAdress);
+		this.setPort(port);
+		this.setUsername(username);
+		this.setPassword(password);
+		this.setDbName(dbName);
+		this.setTitle("");
+		this.setDescription("");
+	}
+	
+
+	
 	public int getId() {
 		return id;
 	}
