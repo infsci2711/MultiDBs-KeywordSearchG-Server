@@ -50,27 +50,10 @@ public class JointRestService {
 				List<ResultAPIModel>result =RconvertDbToViewModel( joinSet.getSearchResult());
 				List<JoinAPIModel> joint =JconvertDbToViewModel( joinSet.getJoinResult());
 				AllAPIModel join = convertDbToViewModel(result,joint);
-				
-
-				
-				
-				//System.out.println(join.getJoinResult());
 				GenericEntity entity = new GenericEntity<AllAPIModel>(
 						join) {
 				};
-//				AllAPIModel m=entity.getEntity();
-//				System.out.println("-----AllModel !!!!entity!!!! in ServerAPI");
-//				for(ResultAPIModel r:m.getSearchResult()){
-//					System.out.println(r.getKeyword());
-//					System.out.println(r.getDatabase());
-//					}
-//				for(JoinAPIModel j:m.getJoinResult()){
-//					System.out.println(j.getRelations());
-//				}
-//				
-//				System.out.println("-------DONE-------");
-//				
-//				System.out.println(result.toString());
+
 				return Response.status(200).entity(entity).build();
 			}
 			return Response.status(404).entity("Person not found").build();
@@ -80,6 +63,8 @@ public class JointRestService {
 		}
 
 	}
+	
+	
     //Join Result
 	private List<JoinAPIModel> JconvertDbToViewModel(
 			final List<JoinModel> joinSet) {

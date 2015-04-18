@@ -71,6 +71,7 @@ public class KeywordSearchDAO {
 				String column = "";
 				String table = "";
 				String database = "";
+				int ID=0;
 
 				Path p = (Path) row.get("p");
 				Iterator<Node> path_it = p.nodes().iterator();
@@ -85,6 +86,7 @@ public class KeywordSearchDAO {
 						break;
 					case "table":
 						table = tmp.getProperty("value").toString();
+						ID=(Integer) tmp.getProperty("ID");
 						break;
 					case "database":
 						database = tmp.getProperty("value").toString();
@@ -93,7 +95,7 @@ public class KeywordSearchDAO {
 						break;
 					}
 				}
-				resultSet.add(new ResultModel(record, column, table, database,term));
+				resultSet.add(new ResultModel(record, column, table, database, ID, term));
 			}
 		  }
 			ignored.success();

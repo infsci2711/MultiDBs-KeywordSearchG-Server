@@ -56,6 +56,8 @@ public class ResultRestService {
 		}
 
 	}
+	
+	
 
 	private List<ResultAPIModel> convertDbToViewModel(
 			final List<ResultModel> resultSet) {

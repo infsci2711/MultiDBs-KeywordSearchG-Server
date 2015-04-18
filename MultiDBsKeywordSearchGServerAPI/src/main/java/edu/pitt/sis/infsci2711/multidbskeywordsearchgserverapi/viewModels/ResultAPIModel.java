@@ -8,6 +8,7 @@ public class ResultAPIModel {
 	private String column="";
 	private String table="";
 	private String database="";
+	private int ID=0;
 	private String keyword="";
 
 
@@ -19,8 +20,13 @@ public class ResultAPIModel {
 		this.setColumn(column);
 		this.setTable(table);
 		this.setDatabase(database);
+		this.setDbId(ID);
 		this.setKeyword(keyword);
 
+	}
+	
+	public void setDbId(int ID){
+		this.ID = ID;
 	}
 	
 	public void setKeyword(String keyword){
@@ -41,6 +47,10 @@ public class ResultAPIModel {
 	
 	public void setDatabase(String database) {
 		this.database = database;
+	}
+	
+	public int getDbId(){
+		return this.ID;
 	}
 
 	public String getKeyword(){
