@@ -44,12 +44,12 @@ public class DataSourceApi {
 	@PUT
     @Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response add(final DatasourceDBViewModel query) {
+	public Response add(final DatasourceDBModel query) {
 		
 		DataSourceService service = new DataSourceService();
 		
 		try {
-			boolean queryResult = service.add(convertViewModelToDB(query));
+			boolean queryResult = service.add(query);
 			if(!queryResult)
 			{
 				return Response.status(500).entity("{\"error\":\"please check your input and try again\"}").build();
@@ -62,9 +62,5 @@ public class DataSourceApi {
 		}
 		
 	}
-	
-	
-	private DatasourceDBModel convertViewModelToDB(final DatasourceDBViewModel model) {
-		return new DatasourceDBModel(Integer.valueOf(model.getId()),model.getIP(),Integer.valueOf(model.getPort()),model.getDBType(),model.getUsername(),model.getPassword(),model.getDBname());
-	}
+
 }

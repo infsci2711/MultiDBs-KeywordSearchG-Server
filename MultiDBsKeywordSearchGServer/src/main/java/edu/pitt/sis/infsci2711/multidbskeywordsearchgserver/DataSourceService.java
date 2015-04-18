@@ -74,16 +74,6 @@ public class DataSourceService {
 		SQL2Neo4J sql2neo = new SQL2Neo4J();
 		
 		int did = db.getId();
-		Client client = ClientBuilder.newClient();
-		WebTarget targetMetaStore = client.target("http://54.152.26.131:7654/")
-				.path("datasources/" + did + "/tables");
-		Response response = targetMetaStore.request(MediaType.APPLICATION_JSON)
-				.get();
-		List<DataSourceTableModel> didTables = response
-				.readEntity(new GenericType<List<DataSourceTableModel>>() {
-				});
-		db.setTables(didTables);
-		
 		if (did != 1 && did != 2 && did != 16) {
 			String dbName = db.getDbName();
 			List<DataSourceTableModel> tables = db.getTables();
