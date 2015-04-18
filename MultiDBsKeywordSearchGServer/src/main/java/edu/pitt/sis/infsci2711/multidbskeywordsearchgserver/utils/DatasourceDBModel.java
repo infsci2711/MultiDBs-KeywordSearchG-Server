@@ -1,7 +1,10 @@
 package edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils;
 
+import java.util.List;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class DatasourceDBModel {
-	
 	private int id;
 	private String dbType;
 	private String  ipAddress;
@@ -12,13 +15,15 @@ public class DatasourceDBModel {
 	private String title;
 	private String description;
 	
-	public DatasourceDBModel() {
+	private List<DataSourceTableModel> tables;
+	
+	public DatasourceDBModel(){
 		
 	}
 	
 	public DatasourceDBModel(final String dbType, final String ipAdress, final int port,
-			final String username, final String password, final String dbName,
-			String title, String description){
+			final String username, final String password, final String dbName, 
+			String title, String descripiton){
 		this.setDbType(dbType);
 		this.setIpAddress(ipAdress);
 		this.setPort(port);
@@ -26,12 +31,12 @@ public class DatasourceDBModel {
 		this.setPassword(password);
 		this.setDbName(dbName);
 		this.setTitle(title);
-		this.setDescription(description);
+		this.setDescription(descripiton);
 	}
 	
 	public DatasourceDBModel(int id, final String dbType, final String ipAdress, final int port,
-			final String username, final String password, final String dbName,
-			String title, String description){
+			final String username, final String password, final String dbName, 
+			String title, String descripiton) {
 		this.setId(id);
 		this.setDbType(dbType);
 		this.setIpAddress(ipAdress);
@@ -40,9 +45,9 @@ public class DatasourceDBModel {
 		this.setPassword(password);
 		this.setDbName(dbName);
 		this.setTitle(title);
-		this.setDescription(description);
+		this.setDescription(descripiton);
 	}
-
+	
 	public int getId() {
 		return id;
 	}
@@ -51,13 +56,12 @@ public class DatasourceDBModel {
 		this.id = id;
 	}
 
-
 	public String getDbType() {
 		return dbType;
 	}
 
-	public void setDbType(String dbType) {
-		this.dbType = dbType;
+	public void setDbType(String dBtype) {
+		dbType = dBtype;
 	}
 
 	public String getIpAddress() {
@@ -99,13 +103,13 @@ public class DatasourceDBModel {
 	public void setDbName(String dBname) {
 		dbName = dBname;
 	}
-
-	public String getTitle() {
-		return title;
+	
+	public void setTitle(String title){
+		this.title = title;	
 	}
-
-	public void setTitle(String title) {
-		this.title = title;
+	
+	public String getTitle(){
+		return this.title;
 	}
 
 	public String getDescription() {
@@ -115,5 +119,12 @@ public class DatasourceDBModel {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
+	public List<DataSourceTableModel> getTables() {
+		return tables;
+	}
+
+	public void setTables(List<DataSourceTableModel> tables) {
+		this.tables = tables;
+	}
 }
