@@ -36,14 +36,18 @@ public class SQL2Neo4J {
 	
 	public SQL2Neo4J(){
 		//Neo4j_Path = "neo4j-community-2.2.0-M02/OMG";           //put the path here
+<<<<<<< HEAD
 		Neo4j_Path = "/Users/jiechen/Google Drive/Eclipse-Luna/neo4j-community-2.2.0-M02/OMG22222";
+=======
+		Neo4j_Path = new Config().neo4j_path;
+>>>>>>> origin/master
 		if(graphDataService==null){
 			graphDataService=new GraphDatabaseFactory().newEmbeddedDatabase(Neo4j_Path);
 		}	
 	}
 	
 	//add new database
-	public static void add(int did, String dbName, Map<String, Map<String, List<String>>> data ){
+	public void add(int did, String dbName, Map<String, Map<String, List<String>>> data ){
 		
 		try(Transaction transction= graphDataService.beginTx()){
 			
