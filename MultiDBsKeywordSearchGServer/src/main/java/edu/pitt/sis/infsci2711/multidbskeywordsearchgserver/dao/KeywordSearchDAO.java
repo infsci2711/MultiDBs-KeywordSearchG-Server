@@ -130,8 +130,7 @@ public class KeywordSearchDAO {
 		}
         
         //System.out.println(api.get(0).toString());
-        
-		Set<String> apis=new HashSet<>();  //make sure the unique tables
+      	Set<String> apis=new HashSet<>();  //make sure the unique tables
 		for(int i=0;i<api.size();i++){
 			apis.add(api.get(i));
 		}
@@ -149,7 +148,7 @@ public class KeywordSearchDAO {
 		}
 		System.out.println("---------Pls Print Out ALL The Tables Needed to be Joint-----------");
 		System.out.println(all);
-		
+		if(!all.isEmpty()){
 		//Cluster
 		Map<Integer, List<Node>> map = new HashMap<>();
 		List<Relationship> X = new ArrayList<>();
@@ -267,7 +266,7 @@ public class KeywordSearchDAO {
 		
 		}	
 		
-		
+      }
 		
 		
 		
@@ -279,6 +278,7 @@ public class KeywordSearchDAO {
 		allModel=new AllModel(resultSet,joinResult);
 		System.out.println("-----DAO in Server");
 		System.out.println(allModel);
+        
 		return allModel;
 	}
 	}
