@@ -20,6 +20,7 @@ please visit: http://54.174.121.19
 
 ====
 CLIP: METHOD & REST API
+
 1. To understand the Method
 
 1) Get SQL database
