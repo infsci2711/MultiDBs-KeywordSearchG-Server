@@ -45,8 +45,8 @@ public class DataSourceService {
 		for (DatasourceDBModel db : responseMetaStore) {
 			int did = db.getId();
 
-			//if (did != 1 && did != 2 && did != 16) 
-			if(did==25){
+			if (did != 1 && did != 2 && did != 16) 
+			{
 				String dbName = db.getDbName();
 				List<DataSourceTableModel> tables = db.getTables();
 				Map<String, List<String>> col_val = new LinkedHashMap<>();
