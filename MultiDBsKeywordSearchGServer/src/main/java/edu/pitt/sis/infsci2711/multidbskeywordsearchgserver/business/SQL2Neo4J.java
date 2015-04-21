@@ -131,7 +131,7 @@ public class SQL2Neo4J {
 	    trans.success();
 		trans.close();
 		}
-		//neo.shutDown(graphDataService);	
+		neo.shutDown(graphDataService);	
 	}
 
 //	public static void main(String[] args) throws Exception {
