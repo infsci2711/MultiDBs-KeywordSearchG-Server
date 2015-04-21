@@ -33,21 +33,24 @@ import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.Neo4j;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.join;
 
 public class KeywordSearchDAO {
-	private static final String DB_PATH = new Config().neo4j_path;
+	//private static final String DB_PATH = new Config().neo4j_path;
 	String resultString;
 	String columnsString;
 	String nodeResult;
 	String rows = "";
-	private static GraphDatabaseService db = new GraphDatabaseFactory().newEmbeddedDatabase(DB_PATH);
+	//private static GraphDatabaseService db = new GraphDatabaseFactory().newEmbeddedDatabase(DB_PATH);
    // static Neo4j neo=new Neo4j();
-
+ 
+	
 	public static void main(String[] args) {
 		KeywordSearchDAO javaQuery = new KeywordSearchDAO();
 		//System.out.println(javaQuery.search("chun").toString());
 	}
 
+
 	public static List<ResultModel> search(String str) {
-		
+		Neo4j neo = new Neo4j();
+		GraphDatabaseService db = neo.graphDataService;
 
 		ExecutionEngine engine = new ExecutionEngine(db);
 		ExecutionResult result;
@@ -113,11 +116,13 @@ public class KeywordSearchDAO {
 	}
 	
 	public static AllModel joinResult(List<ResultModel> resultSet){
+		Neo4j neo=new Neo4j();
+		GraphDatabaseService db = neo.graphDataService;
 		join join= new join();
 		ExecutionEngine engine = new ExecutionEngine(db);
 		ExecutionResult result;
 		List<JoinModel> joinResult =new ArrayList<>();
-		Neo4j neo=new Neo4j();
+		
 		AllModel allModel = new AllModel() ;
 		
 		//get all the search tables

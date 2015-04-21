@@ -33,19 +33,23 @@ import org.neo4j.graphdb.index.UniqueFactory;
 import org.neo4j.kernel.TopLevelTransaction;
 import org.neo4j.tooling.GlobalGraphOperations;
 
-
-
-
-
-
 public class Neo4j {
 	
-	 //String Neo4j_Path="/Users/jiechen/Google Drive/Eclipse-Luna/neo4j-community-2.2.0-M02/test";
-	//GraphDatabaseService graphDataService=new GraphDatabaseFactory().newEmbeddedDatabase(Neo4j_Path);
+	// static String Neo4j_Path="/Users/jiechen/Google Drive/Eclipse-Luna/neo4j-community-2.2.0-M02/test";
+	
 	//Transaction transction=graphDataService.beginTx();;
 	 ExecutionEngine engine;	
 	 UniqueFactory<Node> factory;
 	 Index<Node> indexa;
+	 public static String Neo4j_Path = new Config().neo4j_path;
+	 public static GraphDatabaseService graphDataService;
+
+	 public Neo4j(){
+		 if(graphDataService==null){
+			 graphDataService=new GraphDatabaseFactory().newEmbeddedDatabase(Neo4j_Path);
+		 }
+	 }
+	 //static GraphDatabaseService graphDataService;
 	//list of relationship
 	public static enum RelTypes implements RelationshipType{
 		//KNOW;
@@ -62,14 +66,6 @@ public class Neo4j {
 		PATH;
 	}
 
-	public Neo4j(){
-		//GraphDatabaseService
-		//graphDataService=new GraphDatabaseFactory().newEmbeddedDatabase(Neo4j_Path);
-		
-				
-		//Begin Transaction
-		//transction=graphDataService.beginTx();	
-	}
 	
 		
 	public Relationship createRel(Node first, Node second, String relType,GraphDatabaseService graphDataService){
@@ -172,7 +168,7 @@ public class Neo4j {
 	    }
 	 
 	//create unique node for tables (ID)
-		 public Node createUniqueFactory( int ID, final String name,final String type, final String label,GraphDatabaseService graphDataService )
+		 public Node createUniqueFactory( int ID, final String name,final String type, final String label,GraphDatabaseService graphDataService)
 		    {
 		        // START SNIPPET: prepareUniqueFactory
 		        try( Transaction tx =  graphDataService.beginTx())
@@ -321,7 +317,7 @@ public class Neo4j {
 	        // END SNIPPET: getOrCreateWithFactory
 	    }
 	    
-	    public Node getNode(String name,Label label,String parent,GraphDatabaseService graphDataService ){
+	    public Node getNode(String name,Label label,String parent,GraphDatabaseService graphDataService){
 	    	try(Transaction tx =  graphDataService.beginTx()){
 	    		for(Node node :GlobalGraphOperations.at( graphDataService).getAllNodesWithLabel(label) )
 	    		{
@@ -338,12 +334,12 @@ public class Neo4j {
 	    }
 	    
 	    //get all the nodes
-	    public List<Node> getAllNodes( GraphDatabaseService graphDb )
+	    public List<Node> getAllNodes(GraphDatabaseService graphDataService)
 	    {
 	        ArrayList<Node> nodes = new ArrayList<>();
-	        try (Transaction tx =  graphDb.beginTx())
+	        try (Transaction tx =  graphDataService.beginTx())
 	        {
-	            for ( Node node : GlobalGraphOperations.at( graphDb ).getAllNodes() )
+	            for ( Node node : GlobalGraphOperations.at( graphDataService ).getAllNodes() )
 	            {
 	                nodes.add( node );
 	            }
@@ -353,12 +349,12 @@ public class Neo4j {
 	    }
 	    
 	    //get all the relationships
-	    public List<Relationship> getAllRelationships( GraphDatabaseService graphDb )
+	    public List<Relationship> getAllRelationships(GraphDatabaseService graphDataService )
 	    {
 	        List<Relationship> rels = new ArrayList<>();
-	        try (Transaction tx =  graphDb.beginTx())
+	        try (Transaction tx =  graphDataService.beginTx())
 	        {
-	            for ( Relationship rel : GlobalGraphOperations.at( graphDb ).getAllRelationships() )
+	            for ( Relationship rel : GlobalGraphOperations.at(graphDataService ).getAllRelationships() )
 	            {
 	                rels.add( rel );
 	            }
@@ -368,9 +364,9 @@ public class Neo4j {
 	    }
 	    
 	    //shut down neo4j
-	    public void shutDown(GraphDatabaseService graphDb){
+	    public void shutDown(GraphDatabaseService graphDataService){
 			//shut down graphDataService
-			graphDb.shutdown();
+	    	graphDataService.shutdown();
 			System.out.println("Neo4j database is shutown");
 			
 		}

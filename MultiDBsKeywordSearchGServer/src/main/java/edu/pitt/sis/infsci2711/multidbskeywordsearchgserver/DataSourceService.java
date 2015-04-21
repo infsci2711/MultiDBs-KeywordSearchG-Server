@@ -26,6 +26,8 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.MediaType;
 
+import org.neo4j.graphdb.GraphDatabaseService;
+
 public class DataSourceService {
 
 	public boolean initDataSource() throws SQLException, Exception {
@@ -35,6 +37,7 @@ public class DataSourceService {
 				.path("datasources");
 		Response response = targetMetaStore.request(MediaType.APPLICATION_JSON)
 				.get();
+		System.out.println(response);
 		List<DatasourceDBModel> responseMetaStore = response
 				.readEntity(new GenericType<List<DatasourceDBModel>>() {
 				});
@@ -42,7 +45,8 @@ public class DataSourceService {
 		for (DatasourceDBModel db : responseMetaStore) {
 			int did = db.getId();
 
-			if (did != 1 && did != 2 && did != 16) {
+			//if (did != 1 && did != 2 && did != 16) 
+			if(did==25){
 				String dbName = db.getDbName();
 				List<DataSourceTableModel> tables = db.getTables();
 				Map<String, List<String>> col_val = new LinkedHashMap<>();

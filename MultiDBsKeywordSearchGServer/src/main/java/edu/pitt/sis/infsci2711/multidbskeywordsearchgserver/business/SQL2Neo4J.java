@@ -31,24 +31,30 @@ import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.Neo4j;
 
 public class SQL2Neo4J {
 	
-	String Neo4j_Path;
-	static GraphDatabaseService graphDataService;
+	//String Neo4j_Path;
+	//static GraphDatabaseService graphDataService;
 	
 	public SQL2Neo4J(){
 		//Neo4j_Path = "neo4j-community-2.2.0-M02/OMG";           //put the path here
-		Neo4j_Path = new Config().neo4j_path;
-		if(graphDataService==null){
-			graphDataService=new GraphDatabaseFactory().newEmbeddedDatabase(Neo4j_Path);
-		}	
+//		Neo4j_Path = new Config().neo4j_path;
+//		if(graphDataService==null){
+//			graphDataService=new GraphDatabaseFactory().newEmbeddedDatabase(Neo4j_Path);
+//			System.out.println("------1111111111111");
+//		}	
+//		
+//		System.out.println("------222222222222222");
 	}
 	
 	//add new database
-	public void add(int did, String dbName, Map<String, Map<String, List<String>>> data ){
+	public void add(int did, String dbName, Map<String, Map<String, List<String>>> data){
 		
+		//neo.shutDown(graphDataService); ///PAY ATTENTION TO HERE!!!!!!
+		Neo4j neo=new Neo4j();
+		GraphDatabaseService graphDataService = neo.graphDataService;
 		try(Transaction transction= graphDataService.beginTx()){
 			
-			Neo4j neo=new Neo4j();
 			String database = Integer.toString(did);
+			System.out.println("YYYYYYY have already gone to HEREEEEEEEE");
 			
 			//create node for database
 			Node db=neo.createUniqueFactory(did, dbName, "database", "Database",graphDataService);
@@ -62,7 +68,7 @@ public class SQL2Neo4J {
 					Map<String, List<String>> col_value=(Map<String, List<String>>) pair.getValue();
 					
 					//table--database
-					Node table=neo.createNode(tab, "table", "Table", database, graphDataService);
+					Node table=neo.createNode(tab, "table", "Table", database,graphDataService);
 					currTables.add(table);
 					neo.createRel(table, db, "table-database", graphDataService);
 					
@@ -87,12 +93,12 @@ public class SQL2Neo4J {
 				}	
 			transction.success();
 			transction.close();	
-			addlink(currTables,currCols);
+			addlink(currTables,currCols,graphDataService );
 		}	
 	}
 	
 	//add link between column and tables
-	public static void addlink(List<Node> currTables,List<Node> currCols ){
+	public static void addlink(List<Node> currTables,List<Node> currCols,GraphDatabaseService graphDataService ){
 		Neo4j neo = new Neo4j();
 		try(Transaction trans=graphDataService.beginTx()){
 			ExecutionEngine engine = new ExecutionEngine(graphDataService);
@@ -131,7 +137,7 @@ public class SQL2Neo4J {
 	    trans.success();
 		trans.close();
 		}
-		neo.shutDown(graphDataService);	
+		//neo.shutDown(graphDataService);	
 	}
 
 //	public static void main(String[] args) throws Exception {

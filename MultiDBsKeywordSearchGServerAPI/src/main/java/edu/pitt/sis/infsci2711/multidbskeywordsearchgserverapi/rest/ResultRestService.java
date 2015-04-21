@@ -13,6 +13,8 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.neo4j.graphdb.GraphDatabaseService;
+
 import scala.collection.Set;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.ResultService;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.models.ResultModel;
