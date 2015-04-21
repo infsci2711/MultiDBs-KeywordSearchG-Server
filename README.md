@@ -20,7 +20,7 @@ please visit: http://54.174.121.19
 
 ====
 CLIP: METHOD & REST API
-
+====
 1. To understand the Method
 
 1) Get SQL database
@@ -40,6 +40,7 @@ For the joined columns, we need to find the shortest path with minimum cost valu
 
 https://github.com/infsci2711/MultiDBs-Query-Server/blob/master/restful-api-brief.txt
 
+====
 2) REST service
 
 Output parameter: a json format string like [{"column":"c_name","database":"homework2","record":"Pittsburgh","table":"city"}].
