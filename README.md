@@ -13,7 +13,7 @@ The goal of this project is by transforming relational datases into neo4j databa
 (2) run "geyword.sh"(without double quotation mark).
 ====
 (3) If you run successfully, you can run "lsof -i:7654", then you can see information of the process.
-====
+
 (4) Now you can see our main webpage on your local machine.
 
 ====
