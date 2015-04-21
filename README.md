@@ -12,7 +12,10 @@ please visit: http://54.174.121.19
 
 (1) Download the geyword.sh first on your local machine.
 
-(2) run "geyword.sh"(without double quotation mark).
+(2) run "geyword.sh"(without double quotation mark) along with following parameter
+intall: install required package and build project     
+rebuild: build/rebuild projects     
+start: start server
 
 (3) If you run successfully, you can run "lsof -i:7654", then you can see information of the process.
 
