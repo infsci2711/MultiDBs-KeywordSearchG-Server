@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Striped by HTML5 UP</title>
+		<title>Geyword</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="description" content="" />
 		<meta name="keywords" content="" />
@@ -47,7 +47,7 @@
 											if they get too long. You can also remove the "byline" span entirely if you don't
 											need a byline.
 										-->
-										<h2>Basic Idea</h2>
+										<h2>Detailed Description</h2>
 										
 									</header>
 									<div class="info">
@@ -70,7 +70,7 @@
 											<li><a href="#" class="fa fa-facebook">128</a></li>
 										</ul>
                                                                         </div>
-                                                                        <span class="byline">Work flow</span>
+                                                                        <span class="byline">Main parts, algorithm, and not easy concepts</span>
                                                                         <p>
                                                                                 First, we need to visit a relational database provided by the user and know the structure of the database through SQL queries. The main method can be found in mySQL.java. After that, we can know the database, table, column, and record information. Meanwhile, we also need to know the Foreign Key (FK) in the database, so we the FK.java are used to find the Foreign Key.
 									</p>
@@ -84,7 +84,7 @@
                                                                             For the joined columns, we need to find the shortest path with minimum cost value among tables. To implement this method, we use the <a href="http://en.wikipedia.org/wiki/Steiner_tree_problem">Steiner Tree algorithm</a>. This function is implement in Join.java, which is the main function, Kruskai.java or SteineerTree.java used to find the shortest path between two nodes.
                                                                         </p>
                                                                         
-                                                                        <span class="byline">Node Label</span>
+                                                                        <p> The following shows the major terms: </p>
                                                                         <table class="table table-bordered">
                                                                             <tr class="active">
                                                                                 <td>Node</td>
@@ -107,7 +107,7 @@
                                                                                 <td class="active">value(table name), type(table), parent (database)</td>
                                                                             </tr>
                                                                         </table>
-                                                                        <span class="byline">Relational Label</span>
+                                                                       
                                                                         <table class="table table-bordered">
                                                                             <tr class="active">
                                                                                 <td>Relational Label</td>
@@ -117,7 +117,7 @@
                                                                             <tr class="active">
                                                                                 <td>Belong to</td>
                                                                                 <td class="active">Record - (belong to) - Column<br/>Column - (belong to) -Table<br/>Table - (belong to) - Database</td>
-                                                                                <td class="active">Relational type: <br/>column-table, record-column, table-database</td>
+                                                                                <td class="active">Relation type: <br/>column-table, record-column, table-database</td>
                                                                             </tr>
                                                                             <tr class="active">
                                                                                 <td>Link</td>
@@ -127,10 +127,24 @@
                                                                             <tr class="active">
                                                                                 <td>Path</td>
                                                                                 <td class="active">If 2 columns can be joined together, there is a path between 2 tables.</td>
-                                                                                <td class="active">RelationType: <br/>table.columnname <br/>cost:same database=1rent database=2
+                                                                                <td class="active">RelationType: <br/>table.columnname <br/>cost:<br/>same database=1<br/>different database=2
 </td>
                                                                             </tr>
                                                                         </table>
+                                                                        <span class="byline">How this project work with other projects</span>
+                                                                        <p>Our project is working with MetaStore, Query (PrestoDB) and Visualization projects. We allow users to type in more than one keywords and show list of 
+                                                                           datasets contains these keywords, the data sourc is coming from MetaStore group. Each result item should include datasource name (id), table name, column name where keywords were found. 
+                                                                           And we also add a button to each search result to show data as a result. By clicking on the button, the query (http://54.174.80.167:7654/Query/{databaseid}/{tablename}) will be sent to Presto project via REST request.
+                                                                           The query then be executed and the results we be sent back and showed in the html table. We also provide an access to visualization project.
+                                                                        <span class="byline">Requirements to start your project</span>
+                                                                        <p>
+                                                                            It is quite easy to start our project, an account of Ubuntu, knowledge of using RESTful API and understanding of Neo4j database are required.
+                                                                        </p>
+                                                                        <span class="byline">How to deploy project on AWS Ubuntu servers</span>
+                                                                        <p>
+                                                                            Click on : <a href ="Ubuntu servers.pdf">Preview this instruction</a>
+                                                                        </p>
+                                                                        
 								</article>
 						
 							
@@ -148,8 +162,9 @@
 							<nav id="nav">
 								<ul>
                                                                         <li><a href="index.html">Home</a></li>
+                                                                        <li><a href="web_structure.html">Detailed Description</a></li>
                                                                         <li><a href="api.html">API Documentation</a></li>
-									<li><a href="contact.html">Contact Us</a></li>
+									
 								</ul>
 							</nav>
 

@@ -282,6 +282,12 @@
 		transition: background-color .25s ease-in-out, color .25s ease-in-out;
 		text-shadow: -1px -1px 0px rgba(0,0,0,0.5);
 	}
+        
+        
+           table{
+                        opacity:0.8;
+                        
+        }
 
 		span.button
 		{

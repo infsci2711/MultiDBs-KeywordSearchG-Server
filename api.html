@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Striped by HTML5 UP</title>
+		<title>Geyword </title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="description" content="" />
 		<meta name="keywords" content="" />
@@ -78,7 +78,7 @@
                                                                                 <li><strong>Post: </strong>used to create a new object on the server</li>
                                                                                 <li><strong>Delete:</strong> used to remove an object from the server</li>
                                                                                 </ul>
-                                    </p>
+                                   
                                     <p>                                            By creating URL endpoints that take advantages of these operations, the RESTful API is soon built.
 									</p>
                                                                         
@@ -92,18 +92,24 @@
                                                                         <ul class='style1'>
                                                                             <li><strong>Result/[your query string]: </strong> &nbsp;A single or multiple keyword search on neo4j database</li>
                                                                             
+                                                                            <li><strong>Join/[your query string]:</strong></li>
+                                                                            <li><strong>init/:&nbsp</strong>Initial the data source</li>
+                                                                            <li><strong>add/:&nbsp</strong>Add the data source on the MetaStore to Presto </li>
                                                                             
                                                                         </ul>   
 									
                                                                         
                                                                         <span class="byline">Sample</span>
                                                                         <p>
-                                                                               The path is http://54.174.121.196:7654/Result/ Result in this path represents the query string. 
-                                                                                
-
-                                                                                
-                                                                                <br/>Output parameter: a json format string like [{"column":"c_name","database":"homework2","record":"Pittsburgh","table":"city"}]. 
-									</p>
+                                                                        <li>Result</li>The path is http://54.174.121.196:7654/Result/ Result in this path represents the query string. 
+                                                                        <br/>Output parameter: a json format string like {"ID":25,"column":"acceleration","database":"car","keyword":"16","record":"16","table":"cars"}
+                                                                        <li>Join</li>The path is http://54.174.121.196:7654/Join/
+                                                                        <br/>Output parameter: a json format string adding the join relult like
+                                                                       {"ID":25,"column":"id","database":"car","keyword":"16","record":"816","table":"cars"}],"join":[{"cost":0,"rank":0,"relations":[],"tables":["cars"]}]}
+                                                                        
+                                                                
+                                                                </p>
+                                                                
 								</article>
 						
 							
@@ -121,8 +127,8 @@
 							<nav id="nav">
 								<ul>
                                                                         <li><a href="index.html">Home</a></li>
-                                                                        <li><a href="web_structure.html">Website structure</a></li>
-									<li><a href="contact.html">Contact Us</a></li>
+                                                                        <li><a href="web_structure.html">Detailed Description</a></li>
+									<li><a href="api.html">API Documentation</a></li>
 								</ul>
 							</nav>
 
