@@ -93,7 +93,7 @@ case $1 in
     exit 0;;
   *)
     echo "Usage: setup.sh {install|start|rebuild}"
-    echo "    intall: install required package"
+    echo "    intall: install required package and build project"
     echo "    rebuild: build/rebuild projects"
     echo "    start: start server"
     exit 0;;
