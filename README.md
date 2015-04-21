@@ -9,6 +9,7 @@ please visit: http://54.174.121.19
 ====
 1.Steps to set up the project
 
+
 (1) Download the geyword.sh first on your local machine.
 
 (2) run "geyword.sh"(without double quotation mark).
