@@ -94,7 +94,7 @@ case $1 in
     build
     exit 0;;
   *)
-    echo "Usage: setup.sh {install|start|rebuild}"
+    echo "Usage: geyword.sh {install|start|rebuild}"
     echo "    intall: install required package and build project"
     echo "    rebuild: build/rebuild projects"
     echo "    start: start server"

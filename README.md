@@ -10,9 +10,9 @@ please visit: http://54.174.121.19
 1.Steps to set up the project
 
 
-(1) Download the setup.sh first on your local machine.
+(1) Download the geyword.sh first on your local machine.
 
-(2) run "setup.sh"(without double quotation mark).
+(2) run "geyword.sh"(without double quotation mark).
 
 (3) If you run successfully, you can run "lsof -i:7654", then you can see information of the process.
 
