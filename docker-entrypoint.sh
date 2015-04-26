@@ -29,8 +29,8 @@ mkdir -p deployed
 
 echo "copying jar and config file to deploed folder"
 
-cp /opt/project/MultiDBs-KeywordSearchG-Server/MultiDBsKeywordSearchRServerAPI/target/multidbskeywordsearchgserverapi-0.1-SNAPSHOT.jar /opt/project/deployed
-cp /opt/project/MultiDBs-KeywordSearchG-Server/MultiDBsKeywordSearchRServerAPI/src/main/resources/config.properties /opt/project/deployed
+cp /opt/project/MultiDBs-KeywordSearchG-Server/MultiDBsKeywordSearchGServerAPI/target/multidbskeywordsearchgserverapi-0.1-SNAPSHOT.jar /opt/project/deployed
+cp /opt/project/MultiDBs-KeywordSearchG-Server/MultiDBsKeywordSearchGServerAPI/src/main/resources/config.properties /opt/project/deployed
 
 echo "starting java server"
 
