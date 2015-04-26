@@ -7,45 +7,40 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.Response;
+
+import edu.pitt.sis.infsci2711.multidbs.utils.JerseyClientUtil;
+import edu.pitt.sis.infsci2711.multidbs.utils.PropertiesManager;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.business.SQL2Neo4J;
-import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.dao.KeywordSearchDAO;
-import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.models.ResultModel;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.DataSourceTableModel;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.DatasourceColumnModel;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.DatasourceDBModel;
-import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.Neo4j;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.QueryModel;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.QueryResultModel;
 import edu.pitt.sis.infsci2711.multidbskeywordsearchgserver.utils.RowModel;
-
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.MediaType;
-
-import org.neo4j.graphdb.GraphDatabaseService;
 
 public class DataSourceService {
 
 	public boolean initDataSource() throws SQLException, Exception {
 
-		Client client = ClientBuilder.newClient();
-		WebTarget targetMetaStore = client.target("http://54.152.26.131:7654/")
-				.path("datasources");
-		Response response = targetMetaStore.request(MediaType.APPLICATION_JSON)
-				.get();
-		System.out.println(response);
-		List<DatasourceDBModel> responseMetaStore = response
-				.readEntity(new GenericType<List<DatasourceDBModel>>() {
-				});
+//		Client client = ClientBuilder.newClient();
+//		WebTarget targetMetaStore = client.target("http://54.152.26.131:7654/")
+//				.path("datasources");
+//		Response response = targetMetaStore.request(MediaType.APPLICATION_JSON)
+//				.get();
+		
+		Response responseQuery = JerseyClientUtil.doGet(PropertiesManager.getInstance().getStringProperty("metastore.rest.base"), 
+				PropertiesManager.getInstance().getStringProperty("metastore.rest.datasources"));
+		
+		System.out.println(responseQuery);
+		List<DatasourceDBModel> responseMetaStore = responseQuery.readEntity(new GenericType<List<DatasourceDBModel>>(){});
+		
 		SQL2Neo4J sql2neo = new SQL2Neo4J();
 		for (DatasourceDBModel db : responseMetaStore) {
 			int did = db.getId();
 
-			if (did != 1 && did != 2 && did != 16) 
+			if (did != 1 && did != 2 && did != 16) // WHAT ARE THOSE NUMBERS???????
 			{
 				String dbName = db.getDbName();
 				List<DataSourceTableModel> tables = db.getTables();
@@ -74,7 +69,7 @@ public class DataSourceService {
 		return false;
 	}
 
-	public boolean add(DatasourceDBModel db) throws SQLException, Exception {
+	public boolean add(final DatasourceDBModel db) throws SQLException, Exception {
 		SQL2Neo4J sql2neo = new SQL2Neo4J();
 		
 		int did = db.getId();
@@ -105,23 +100,29 @@ public class DataSourceService {
 	}
 
 	// send request to PrestoDB
-	public List<String> getValue(int did, String tableName, String columnName) {
+	public List<String> getValue(final int did, final String tableName, final String columnName) {
 
 		String query = "Select " + columnName + " from " + did + "."
 				+ tableName + "";
 		// String query = "select aid from 19.test";
-		QueryModel QueryModel = new QueryModel();
-		QueryModel.setQuery(query);
+		QueryModel queryModel = new QueryModel();
+		queryModel.setQuery(query);
 		List<String> values = new ArrayList<>();
 		System.out.println(query);
-		Client client = ClientBuilder.newClient();
-		WebTarget target = client.target("http://54.174.80.167:7654/");
-		target = target.path("Query/");
-		Response response = target.request(MediaType.APPLICATION_JSON).put(
-				Entity.entity(QueryModel, MediaType.APPLICATION_JSON),
-				Response.class);
-		System.out.println(response);
-		QueryResultModel qresult = response.readEntity(QueryResultModel.class);
+		
+		Response responseQuery = JerseyClientUtil.doPut(PropertiesManager.getInstance().getStringProperty("query.rest.base"), 
+				PropertiesManager.getInstance().getStringProperty("query.rest.query"), queryModel);
+		
+//		Client client = ClientBuilder.newClient();
+//		WebTarget target = client.target("http://54.174.80.167:7654/");
+//		target = target.path("Query/");
+//		
+//		Response response = target.request(MediaType.APPLICATION_JSON).put(
+//				Entity.entity(QueryModel, MediaType.APPLICATION_JSON),
+//				Response.class);
+		
+		System.out.println(responseQuery);
+		QueryResultModel qresult = responseQuery.readEntity(QueryResultModel.class);
 		System.out.println(qresult);
 		RowModel[] r = qresult.getData();
 		System.out.println(r);

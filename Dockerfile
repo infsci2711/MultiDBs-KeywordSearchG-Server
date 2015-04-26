@@ -4,7 +4,8 @@ MAINTAINER Evgeny Karataev <Karataev.Evgeny@gmail.com>
 RUN apt-get update && apt-get install -y \
     openssh-server \
     openjdk-7-jdk \
-    curl 
+    curl \
+    git
 
 RUN mkdir -p /var/run/sshd
 
@@ -22,7 +23,21 @@ ENV M2 $M2_HOME/bin
 
 ENV PATH $M2:$PATH
 
+RUN useradd -d /home/keywordsearchg1 keywordsearchg1
+RUN mkdir -p /home/keywordsearchg1
+RUN chown keywordsearchg1 /home/keywordsearchg1
+
+RUN echo "keywordsearchg1:keywordsearchg1" | chpasswd
+
+COPY docker-entrypoint.sh /home/keywordsearchg1/entrypoint.sh
+
+RUN chmod -R 777 /home/keywordsearchg1
+
+ENTRYPOINT ["/home/keywordsearchg1/entrypoint.sh"]
 
 EXPOSE 22
+EXPOSE 7654
+
+VOLUME /opt/project/deployed
 
 CMD ["/usr/sbin/sshd", "-D"]
