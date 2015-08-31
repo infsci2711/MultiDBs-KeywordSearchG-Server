@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+apt-get update
+
 echo "creating folder for servers source code"
 
 cd /opt
